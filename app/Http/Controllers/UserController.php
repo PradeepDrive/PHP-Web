@@ -39,7 +39,7 @@ class UserController extends Controller
         $pages = Page::all();
         $departments = Department::all();
         return view('users.add')->with([
-            'menu' => 'users',
+            'menu' => 'user_create',
             'user' => $user,
             'pages' => $pages,
             'departments' => $departments,

@@ -187,8 +187,8 @@
                 @endif
 
                 @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.users'))->first())
-                    <li class="nav-item @if ($menu == 'users') active @endif">
-                        <a class="nav-link" href="{{ route('user.create') }}">Users</a>
+                    <li class="nav-item @if ($menu == 'user_create') active @endif">
+                        <a class="nav-link" href="{{ route('user.create') }}">User Registration</a>
                     </li>
                 @endif
 
