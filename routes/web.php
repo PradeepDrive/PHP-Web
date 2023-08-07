@@ -80,6 +80,9 @@ Route::group(['middleware' => ["auth"]], function () {
 
     Route::group([  'middleware' => 'access:' . Page::PAGES["users"]], function () {
         Route::resource('user', 'UserController');
+        Route::get('user-registration', 'UserController@userRegistration')->name('user.add_registration');
+        Route::post('user-post-registration', 'UserController@UserPostRegistration')->name('user.post-registration');
+
     });
 
     Route::group([  'middleware' => 'access:' . Page::PAGES["location_information"]], function () {
@@ -121,4 +124,8 @@ Route::group(['middleware' => ["auth"]], function () {
     Route::group([  'middleware' => 'access:' . Page::PAGES["departments"]], function () {
         Route::resource('department', 'DepartmentController');
     });
+
+    // Route::group([  'middleware' => 'access:' . Page::PAGES["departments"]], function () {
+        Route::resource('affiliated', 'AffiliatedToController');
+    // });
 });

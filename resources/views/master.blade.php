@@ -175,7 +175,7 @@
                 @endif
 
                 @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.settings'))->first())
-                    <li class="nav-item @if ($menu == 'setting' || $menu == 'departments') active @endif">
+                    <li class="nav-item @if ($menu == 'setting' || $menu == 'departments' || $menu == 'affiliatedto') active @endif">
                         <a class="nav-link" href="{{ route('settings') }}">Settings</a>
                     </li>
                 @endif
@@ -187,8 +187,8 @@
                 @endif
 
                 @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.users'))->first())
-                    <li class="nav-item @if ($menu == 'user_create') active @endif">
-                        <a class="nav-link" href="{{ route('user.create') }}">User Registration</a>
+                    <li class="nav-item @if ($menu == 'add_registration') active @endif">
+                        <a class="nav-link" href="{{ route('user.add_registration') }}">User Registration</a>
                     </li>
                 @endif
 
