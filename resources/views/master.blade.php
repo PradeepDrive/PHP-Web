@@ -186,7 +186,7 @@
                     </li>
                 @endif
 
-                @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.users'))->first())
+                @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.user_registration'))->first())
                     <li class="nav-item @if ($menu == 'add_registration') active @endif">
                         <a class="nav-link" href="{{ route('user.add_registration') }}">User Registration</a>
                     </li>
