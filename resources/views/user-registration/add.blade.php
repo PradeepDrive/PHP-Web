@@ -72,9 +72,9 @@
                      <div class="col-sm-8 ">
                          <select id="location" name="location" class="form-control">
                             <option value="" selected> -- Select location to -- </option>
-                            <option value="1" > UK </option>
-                            <option value="2" > USA </option>
-                            <option value="3" > USE </option>
+                            @foreach ($location as $id => $name)
+                                <option value="{{$id}}"  > {{$name}} </option>
+                            @endforeach
                          </select>
                     </div>
                 </div>
@@ -100,35 +100,6 @@
                                 <option value="{{$id}}"  > {{$name}} </option>
                            @endforeach
                          </select>
-                    </div>
-                </div>
-
-                
-
-                <div class="row form-group mt-3">
-                    <label for="access" class="col-sm-4 font-weight-bold">Pages Access:<span class="required">*</span></label>
-                     <div class="col-sm-8 ">
-                         <select id="access" name="access[]"  value="" required="required" multiple="multiple">
-
-                             @foreach ($pages as $page)
-                             <option value="{{$page->id}}"> {{$page->page}} </option>
-                             @endforeach
-                         </select>
-                    </div>
-                </div>
-
-                <div class="row form-group mt-3">
-                    <label for="landing_page" class="col-sm-4 font-weight-bold">Landing Page:</label>
-                     <div class="col-sm-8 ">
-                         <select id="landing_page" name="landing_page"  value="{{old('landing_page')}}" required="required" class="form-control">
-                            <option value="0" selected> home </option>
-                             @foreach ($pages as $page)
-                             @if($page->id != config("constant.PAGES.rack_info")) 
-                             <option value="{{$page->id}}"> {{$page->page}} </option>
-                             @endif
-                             @endforeach
-                         </select>
-                         <span class="w-100 ml-2 small font-italic">make sure you have given this page access to the user</span>
                     </div>
                 </div>
 

@@ -175,7 +175,7 @@
                 @endif
 
                 @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.settings'))->first())
-                    <li class="nav-item @if ($menu == 'setting' || $menu == 'departments' || $menu == 'affiliatedto') active @endif">
+                    <li class="nav-item @if ($menu == 'setting' || $menu == 'departments' || $menu == 'affiliatedto' || $menu == 'location') active @endif">
                         <a class="nav-link" href="{{ route('settings') }}">Settings</a>
                     </li>
                 @endif

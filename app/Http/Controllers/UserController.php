@@ -10,6 +10,7 @@ use App\Models\Department;
 use App\Models\AffiliatedTo;
 use Hash;
 use Illuminate\Support\Facades\Validator;
+use DB;
 
 class UserController extends Controller
 {
@@ -220,15 +221,15 @@ class UserController extends Controller
     public function userRegistration(Request $request)
     {
         $user = Auth::user()->load(["pagesAccess"]);
-        $pages = Page::all();
         $departments = Department::all();
         $AffiliatedTo = AffiliatedTo::pluck('Name', 'Id')->toArray();
+        $Location = \DB::table('Location')->pluck('Name', 'Id')->toArray();
         return view('user-registration.add')->with([
             'menu' => 'add_registration',
             'user' => $user,
-            'pages' => $pages,
             'departments' => $departments,
-            'affiliated_to' => $AffiliatedTo
+            'affiliated_to' => $AffiliatedTo,
+            'location' => $Location
         ]);
     }
 
@@ -241,36 +242,31 @@ class UserController extends Controller
      */
     public function UserPostRegistration(Request $request)
     {
-        // $rule = [
-        //     "access" => "required|array",
-        //     "first_name" => "required|string",
-        //     "last_name" => "required|string",
-        //     "landing_page" => "required|numeric",
-        //     "phone" => "nullable|string",
-        //     "email" => "nullable|email|unique:UserRegistration,Email",
-        //     "emp_id" => "nullable|string",
-        //     "mailing_address" => "nullable|string",
-        //     "affiliated_to" => "nullable",
-        //     "department" => "nullable|numeric|exists:departments,id",
-        // ];
-        // $validator = Validator::make($request->all(), $rule);
-        // if ($validator->fails())
-        //     return back()->withErrors($validator)->withInput()->with('error_message', $validator->errors()->first());
-        
-        // $user = \DB::table('UserRegistration')->insert([
-        //     "FirstName" => $request->first_name,
-        //     "LastName" => $request->last_name,
-        //     "EmployeeId" => $request->has("emp_id")?$request->emp_id:NULL,
-        //     "PhoneNumber" => $request->has("phone")?$request->phone:NULL,
-        //     "Email" => $request->has("email")?$request->email:NULL,
-        //     "MailingAddress" => $request->has("mailing_address")?$request->mailing_address:NULL,
-        //     "LocationId" => $request->has("location")?$request->location:NULL,
-        //     "DepartmentId" => $request->has("department")?$request->department:NULL,
-        //     "AffiliatedToId" => $request->has("affiliated_to")?$request->affiliated_to:NULL,
-        //     // "landing_page" => $request->landing_page,
-        // ]);
-
-        // $user->pagesAccess()->sync($request->access);
+        $rule = [
+            "first_name" => "required|string",
+            "last_name" => "required|string",
+            "phone" => "nullable|string",
+            "email" => "nullable|email|unique:UserRegistration,Email",
+            "emp_id" => "nullable|string",
+            "mailing_address" => "nullable|string",
+            "affiliated_to" => "nullable",
+            "department" => "nullable|numeric|exists:departments,id",
+        ];
+        $validator = Validator::make($request->all(), $rule);
+        if ($validator->fails())
+            return back()->withErrors($validator)->withInput()->with('error_message', $validator->errors()->first());
+        DB::statement('SET FOREIGN_KEY_CHECKS=0');
+        DB::table('UserRegistration')->insert([
+            "FirstName" => $request->first_name,
+            "LastName" => $request->last_name,
+            "EmployeeId" => $request->has("emp_id")?$request->emp_id:NULL,
+            "PhoneNumber" => $request->has("phone")?$request->phone:NULL,
+            "Email" => $request->has("email")?$request->email:NULL,
+            "MailingAddress" => $request->has("mailing_address")?$request->mailing_address:NULL,
+            "LocationId" => $request->has("location")?$request->location:NULL,
+            "DepartmentId" => $request->has("department")?$request->department:NULL,
+            "AffiliatedToId" => $request->has("affiliated_to")?$request->affiliated_to:NULL,
+        ]);
         $request->session()->flash("info_message","User registration has been added successfully.");
         return redirect()->back();
     }

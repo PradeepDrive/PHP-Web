@@ -127,5 +127,6 @@ Route::group(['middleware' => ["auth"]], function () {
 
     // Route::group([  'middleware' => 'access:' . Page::PAGES["departments"]], function () {
         Route::resource('affiliated', 'AffiliatedToController');
+        Route::resource('location', 'LocationController');
     // });
 });
