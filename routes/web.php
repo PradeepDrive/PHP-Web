@@ -125,9 +125,9 @@ Route::group(['middleware' => ["auth"]], function () {
         Route::resource('department', 'DepartmentController');
     });
 
-    Route::group([  'middleware' => 'access:' . Page::PAGES["user_registration"]], function () {
-        Route::get('user-registration', 'UserController@userRegistration')->name('user.add_registration');
-        Route::post('user-post-registration', 'UserController@UserPostRegistration')->name('user.post-registration');
+    Route::group([  'middleware' => 'access:' . Page::PAGES["employee_registration"]], function () {
+        Route::get('employee-registration', 'UserController@userRegistration')->name('user.add_registration');
+        Route::post('employee-post-registration', 'UserController@UserPostRegistration')->name('user.post-registration');
 
     });
     

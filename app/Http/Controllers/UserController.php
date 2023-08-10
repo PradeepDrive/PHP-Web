@@ -245,14 +245,19 @@ class UserController extends Controller
         $rule = [
             "first_name" => "required|string",
             "last_name" => "required|string",
-            "phone" => "nullable|string",
-            "email" => "nullable|email|unique:UserRegistration,Email",
-            "emp_id" => "nullable|string",
+            "phone" => "required|string",
+            "email" => "required|email|unique:UserRegistration,Email",
+            "emp_id" => "required|string|unique:UserRegistration,EmployeeId",
             "mailing_address" => "nullable|string",
-            "affiliated_to" => "nullable",
-            "department" => "nullable|numeric|exists:departments,id",
+            "location" => "required",
+            "department" => "required|numeric|exists:departments,id",
+            "affiliated_to" => "required",
         ];
-        $validator = Validator::make($request->all(), $rule);
+        $message = [
+            "emp_id.required" => "Employee id must be required..!",
+            "emp_id.unique" => "Employee id has taken already..!"
+        ];
+        $validator = Validator::make($request->all(), $rule, $message);
         if ($validator->fails())
             return back()->withErrors($validator)->withInput()->with('error_message', $validator->errors()->first());
         DB::statement('SET FOREIGN_KEY_CHECKS=0');

@@ -16,7 +16,7 @@
     @endif
     <div class="row mt-5">
         <div class="col-12">
-            <h3>Add User Registration</h3>
+            <h3>Employee registration</h3>
         </div>
     </div>
 
