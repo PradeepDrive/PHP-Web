@@ -130,7 +130,11 @@ Route::group(['middleware' => ["auth"]], function () {
         Route::post('employee-post-registration', 'UserController@UserPostRegistration')->name('user.post-registration');
 
     });
-    
+    Route::group([  'middleware' => 'access:' . Page::PAGES["complete_window_inventory"]], function () {
+        Route::get('create-complete-windows-inventory', 'CwInventoryController@create')->name('cwi.create');
+        Route::post('store-complete-windows-inventory', 'CwInventoryController@store')->name('cwi.add');
+        Route::get('id-search-in-work-order', 'CwInventoryController@idSearchWithMap')->name('cwi.id_search');
+    });
     Route::resource('affiliated', 'AffiliatedToController');
     Route::resource('location', 'LocationController');
 });

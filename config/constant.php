@@ -19,5 +19,6 @@ return [
         "12" => "covid-19-data.index",
         "13" => "window-relocate",
         "21" => "user.add_registration",
+        "22" => "cwi.create",
     ] 
 ];

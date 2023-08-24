@@ -28,7 +28,8 @@ class Page extends Model
         "dealer_info" => 18,
         "dealers" => 19,
         "order_search" => 20,
-        "employee_registration" => 21
+        "employee_registration" => 21,
+        "complete_window_inventory" => 22,
     ];
 
     protected $guarded = [
