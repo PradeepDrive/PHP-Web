@@ -40,7 +40,7 @@ class CwInventoryController extends Controller
             return back()->withErrors($validator)->withInput()->with('error_message', $validator->errors()->first());
         $work_order = (array) DB::table('workorder')->select('ORDER #', 'PO', 'DEALER')->where('LINE #1', $request->id_number)->first();
         if(@!$work_order) {
-            return back()->with('error_message', 'Id number not exist');
+            return back()->withInput()->with('error_message', 'Id number not exist');
         }
         $data['Location'] = $request->location;
         $data['BatchNumber'] = $request->batch_number;
