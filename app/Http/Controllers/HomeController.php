@@ -624,6 +624,7 @@ class HomeController extends Controller
     public function settings()
     {
         $setting = getSetting();
+        $setting['system_date'] = $setting['orderdate'];
         return view('settings')->with([
             'menu' => 'setting',
             'setting' => $setting,

@@ -59,6 +59,18 @@
                             @endif
                         </div>
                     </div>
+                    <div class="row form-group mt-3">
+                        <label class="col-sm-9 text-right" for="system_date">System Date:<span
+                                class="required">*</span></label>
+                        <div class="col-sm-3 @if ($errors->has('system_date')) has-error @endif">
+                            <input type="text" id="system_date" name="system_date" class="form-control"
+                                value="{{ old('system_date', empty($setting['system_date']) ? '' : $setting['system_date']) }}"
+                                required>
+                            @if ($errors->has('system_date'))
+                                <br><span class="w-100 ml-2 small error">{{ $errors->first('system_date') }}</span>
+                            @endif
+                        </div>
+                    </div>
                     <div class="row text-center mt-5">
                         <div class="col-sm-12">
                             <button type="submit" class="btn btn-dark w-50">SAVE</button>
@@ -90,6 +102,10 @@
     <script>
         $(document).ready(function() {
             $("#orderdate").datepicker({
+                dateFormat: "yy-mm-dd"
+            });
+
+            $("#system_date").datepicker({
                 dateFormat: "yy-mm-dd"
             });
         })

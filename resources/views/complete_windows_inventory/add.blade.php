@@ -1,6 +1,7 @@
 @extends('master')
 
 @section('content')
+
 <div class="container my-5">
     @if (session('info_message'))
         <div class="alert alert-info alert-dismissible mt-5">
@@ -25,6 +26,13 @@
             <form class="form" method="POST" action="{{ route('cwi.add') }}">
                 @csrf
                 <div class="row form-group mt-3">
+                    <label for="id_number" class="col-sm-4 font-weight-bold">ID number:<span class="required">*</span></label>
+                     <div class="col-sm-8 ">
+                         <input type="text" id="id_number" name="id_number" placeholder="Enter id number" value="" required="required" class="form-control">
+
+                    </div>
+                </div>
+                <div class="row form-group mt-3">
                     <label for="location" class="col-sm-4 font-weight-bold">Location:<span class="required">*</span></label>
                      <div class="col-sm-8 ">
                          <input type="text" id="location" name="location" placeholder="Enter location" value="{{old('location')}}" required="required" class="form-control">
@@ -39,28 +47,21 @@
                     </div>
                 </div>
                 <div class="row form-group mt-3">
-                    <label for="referance" class="col-sm-4 font-weight-bold">Referance:<span class="required">*</span></label>
-                     <div class="col-sm-8 ">
-                         <input type="text" id="referance" name="referance" placeholder="Enter referance" value="{{old('referance')}}" required="required" class="form-control">
-
-                    </div>
-                </div>
-                <div class="row form-group mt-3">
-                    <label for="id_number" class="col-sm-4 font-weight-bold">ID number:<span class="required">*</span></label>
-                     <div class="col-sm-8 ">
-                         <input type="text" id="id_number" name="id_number" placeholder="Enter id number" value="{{old('id_number')}}" required="required" class="form-control">
-
-                    </div>
-                </div>
-                <div class="row form-group mt-3">
                     <label for="name" class="col-sm-4 font-weight-bold">Name:<span class="required">*</span></label>
                      <div class="col-sm-8 ">
                          <input type="text" id="name" name="name" placeholder="Enter name" value="{{old('name')}}" required="required" class="form-control">
 
                     </div>
                 </div>
+                <div class="row form-group mt-3">
+                    <label for="referance" class="col-sm-4 font-weight-bold">Referance:<span class="required">*</span></label>
+                     <div class="col-sm-8 ">
+                         <input type="text" id="referance" name="referance" placeholder="Enter referance" value="{{old('referance')}}" required="required" class="form-control">
+
+                    </div>
+                </div>
                 <div class=" form-group mt-3 text-center">
-                    <button type="submit" class="btn btn-dark text-light"> Submit </button>
+                    <button type="submit" style="display:none;"></button>
                 </div>
 
             </form>

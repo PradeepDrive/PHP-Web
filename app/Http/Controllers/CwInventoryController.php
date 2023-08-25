@@ -32,12 +32,16 @@ class CwInventoryController extends Controller
             "location" => "required|string",
             "batch_number" => "required|string",
             "referance" => "required|string",
-            "id_number" => "required|string",
+            "id_number" => "required|string|unique:wrapped_windows,LINE#,NULL,id",
             "name" => "required|string",
         ];
         $validator = Validator::make($request->all(), $rule);
         if ($validator->fails())
             return back()->withErrors($validator)->withInput()->with('error_message', $validator->errors()->first());
+        $work_order = (array) DB::table('workorder')->select('ORDER #', 'PO', 'DEALER')->where('LINE #1', $request->id_number)->first();
+        if(@!$work_order) {
+            return back()->with('error_message', 'Id number not exist');
+        }
         $data['Location'] = $request->location;
         $data['BatchNumber'] = $request->batch_number;
         $data['Reference'] = $request->referance;
@@ -46,13 +50,13 @@ class CwInventoryController extends Controller
         $data['Date'] = date('Y-m-d');
         $data['Time'] = date('H:i:s');
         
-        $work_order = (array) DB::table('workorder')->select('ORDER #', 'PO', 'DEALER')->where('LINE #1', $request->id_number)->first();
         $data['CompanyName'] = $work_order['DEALER'];
         $data['CustomerName'] = $work_order['PO'];
         $data['OrderNumber'] = $work_order['ORDER #'];
         DB::table('wrapped_windows')->insert($data);
         $request->session()->flash("info_message", "Data has been saved successfully.");
-        return redirect()->back();
+        session(['data' => $request->all()]);
+        return redirect()->back()->withInput();
     }
 
     /**
