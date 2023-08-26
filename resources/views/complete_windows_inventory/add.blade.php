@@ -61,7 +61,7 @@
                     </div>
                 </div>
                 <div class=" form-group mt-3 text-center">
-                    <button type="submit" style="display:none;"></button>
+                    <button type="submit" class="btn btn-dark text-light">Submit</button>
                 </div>
 
             </form>
@@ -73,26 +73,28 @@
 @section('script')
 <script type="text/javascript">
 $(function(){
+    $("#id_number").focus();
+
   $('#access').multiselect({
     buttonClass:'form-control',
 
   });
   
-  $('#id_number').flexdatalist({
-        cache: false,
-        keywordParamName: "search_value",
-        minLength: 0,
-        searchContain: true,
-        visibleProperties: ["LINE #1"],
-        searchIn: ["LINE #1"],
-        textProperty: '{LINE #1}',
-        url: "{{ route('cwi.id_search') }}",
-        noResultsText: 'no record founded'
-    })
-    .on('select:flexdatalist', async function(event, items) {
-        // let pasient_access_log = await AJAX.AjaxHelper.POSTRequest(`${patientJournalLogUrl}?pasient_id=${items.id}`, false, false);
-        // window.location.href = '/patient/'+ items.id;
-    });
+//   $('#id_number').flexdatalist({
+//         cache: false,
+//         keywordParamName: "search_value",
+//         minLength: 0,
+//         searchContain: true,
+//         visibleProperties: ["LINE #1"],
+//         searchIn: ["LINE #1"],
+//         textProperty: '{LINE #1}',
+//         url: "{{ route('cwi.id_search') }}",
+//         noResultsText: 'no record founded'
+//     })
+//     .on('select:flexdatalist', async function(event, items) {
+//         // let pasient_access_log = await AJAX.AjaxHelper.POSTRequest(`${patientJournalLogUrl}?pasient_id=${items.id}`, false, false);
+//         // window.location.href = '/patient/'+ items.id;
+//     });
 });
     </script>
 @endsection
