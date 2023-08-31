@@ -232,7 +232,9 @@
                         <a class="nav-link" href="{{ route('cwi.create') }}">Complete windows inventory</a>
                     </li>
                 @endif
-
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('cwi.search_window') }}">Complete windows inventory search</a>
+                    </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}"
                         onclick="event.preventDefault();

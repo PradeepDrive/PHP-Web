@@ -64,7 +64,7 @@ class CwInventoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function idSearchWithMap(Request $request)
+    public function search(Request $request)
     {
         $search_val = $request->search_value;
         if (isset($search_val) && $search_val != '') {
@@ -76,5 +76,39 @@ class CwInventoryController extends Controller
             return response()->json($data);
         }
     }
+
+
+    /**
+     * To search window
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function searchWindow(Request $request)
+    {
+        return view("complete_windows_inventory.search")->with([
+            "menu" => ""
+        ]);
+    }
     
+
+    /**
+     * To post search window
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function postSearchWindow(Request $request)
+    {
+        $search_val = $request->search;
+        if (!$search_val) {
+            return response()->json([]);
+        }
+        $system_date = getSetting()['system_date'];
+        $selected_column = $request->selected_column;
+        $wrapped_windows = DB::table('wrapped_windows')->where('Date', '>=', $system_date)->orderBy(@$selected_column, 'asc');
+        $wrapped_windows->where(function ($query) use ($search_val, $selected_column) {
+            $query->orwhere(@$selected_column, 'LIKE', '%' . $search_val . '%');
+        });
+        $data = $wrapped_windows->get();
+        return response()->json($data);
+    }
 }

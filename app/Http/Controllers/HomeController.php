@@ -624,7 +624,6 @@ class HomeController extends Controller
     public function settings()
     {
         $setting = getSetting();
-        $setting['system_date'] = $setting['orderdate'];
         return view('settings')->with([
             'menu' => 'setting',
             'setting' => $setting,
@@ -638,6 +637,7 @@ class HomeController extends Controller
             'rack_a_max' => ['required', 'numeric'],
             'rack_b_max' => ['required', 'numeric'],
             'orderdate' => ['required', 'date'],
+            'system_date' => ['required', 'date'],
         ];
         $validator = Validator::make($request->all(), $rule);
         if ($validator->fails()) {

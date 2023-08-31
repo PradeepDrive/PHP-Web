@@ -135,6 +135,11 @@ Route::group(['middleware' => ["auth"]], function () {
         Route::post('store-complete-windows-inventory', 'CwInventoryController@store')->name('cwi.add');
         Route::get('id-search-in-work-order', 'CwInventoryController@idSearchWithMap')->name('cwi.id_search');
     });
+
+    Route::get('complete-windows-inventory-search', 'CwInventoryController@searchWindow')->name('cwi.search_window');
+    Route::post('complete-windows-inventory-post-search', 'CwInventoryController@postSearchWindow')->name('cwi.post_search_window');
+
+
     Route::resource('affiliated', 'AffiliatedToController');
     Route::resource('location', 'LocationController');
 });
