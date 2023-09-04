@@ -136,9 +136,14 @@ Route::group(['middleware' => ["auth"]], function () {
         Route::get('id-search-in-work-order', 'CwInventoryController@idSearchWithMap')->name('cwi.id_search');
     });
 
-    Route::get('complete-windows-inventory-search', 'CwInventoryController@searchWindow')->name('cwi.search_window');
-    Route::post('complete-windows-inventory-post-search', 'CwInventoryController@postSearchWindow')->name('cwi.post_search_window');
+    Route::group([  'middleware' => 'access:' . Page::PAGES["complete_window_inventory_search"]], function () {
+        Route::get('complete-windows-inventory-search', 'CwInventoryController@searchWindow')->name('cwi.search_window');
+        Route::post('complete-windows-inventory-post-search', 'CwInventoryController@postSearchWindow')->name('cwi.post_search_window');
+    });
 
+    Route::group([  'middleware' => 'access:' . Page::PAGES["search"]], function () {
+        Route::get('search', 'HomeController@search')->name('search');
+    });
 
     Route::resource('affiliated', 'AffiliatedToController');
     Route::resource('location', 'LocationController');

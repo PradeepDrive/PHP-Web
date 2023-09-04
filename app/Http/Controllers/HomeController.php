@@ -138,7 +138,8 @@ class HomeController extends Controller
     public function postSearchWindow(Request $request)
     {
         $item_number = $request['item_number'];
-        $total_available = WorkOrder::where('LINE #1', 'like', $item_number . '-%')->sum('qty');
+        $system_date = getSetting()['system_date'];
+        $total_available = WorkOrder::where('LINE #1', 'like', $item_number . '-%')->whereRaw("DATE_FORMAT(STR_TO_DATE(`ORDER DATE`, '%d %M %Y'), '%Y-%m-%d') >= '".$system_date."'")->sum('qty');
         $stocks = Stock::where('item_number', $item_number)
             ->orWhere('item_number', 'like', $item_number . '-%')
             ->groupBy('rack_number')
@@ -163,8 +164,9 @@ class HomeController extends Controller
 
     public function postSearchOrder(Request $request)
     {
+        $system_date = getSetting()['system_date'];
         $order_number = $request['order_number'];
-        $orders = WorkOrder::where('ORDER #', '=', $order_number)->get();
+        $orders = WorkOrder::where('ORDER #', '=', $order_number)->whereRaw("DATE_FORMAT(STR_TO_DATE(`ORDER DATE`, '%d %M %Y'), '%Y-%m-%d') >= '".$system_date."'")->get();
         foreach ($orders as $row){
             $row['location'] = 'No';
             $stock = Stock::where('item_number', '=', $row['LINE #1'])->first();
@@ -645,5 +647,13 @@ class HomeController extends Controller
         }
         updateSetting($request->except(['_token']));
         return back()->with('info_message', 'Successfully saved');
+    }
+
+
+    public function search()
+    {
+        return view('search')->with([
+            'menu' => 'order_window_search',
+        ]);
     }
 }

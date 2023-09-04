@@ -20,5 +20,7 @@ return [
         "13" => "window-relocate",
         "21" => "user.add_registration",
         "22" => "cwi.create",
+        "23" => "cwi.search_window",
+        "24" => "search",
     ] 
 ];

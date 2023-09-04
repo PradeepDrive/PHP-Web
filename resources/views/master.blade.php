@@ -93,8 +93,11 @@
                         <a class="nav-link" href="{{ route('order-search') }}">Order Search</a>
                     </li>
                 @endif
-
-
+                @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.search'))->first())
+                    <li class="nav-item @if ($menu == 'order_window_search') active @endif">
+                        <a class="nav-link" href="{{ route('search') }}">Search</a>
+                    </li>
+                @endif
                 @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.stock_window'))->first())
                     <li class="nav-item @if ($menu == 'stock') active @endif">
                         <a class="nav-link" href="{{ route('stock-window') }}">Stock Window</a>
@@ -232,9 +235,12 @@
                         <a class="nav-link" href="{{ route('cwi.create') }}">Complete windows inventory</a>
                     </li>
                 @endif
-                    <li class="nav-item">
+                @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.complete_window_inventory_search'))->first())
+                    <li class="nav-item  @if ($menu == 'cwi_search') active @endif">
                         <a class="nav-link" href="{{ route('cwi.search_window') }}">Complete windows inventory search</a>
                     </li>
+                @endif
+
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('logout') }}"
                         onclick="event.preventDefault();

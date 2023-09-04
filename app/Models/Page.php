@@ -30,6 +30,8 @@ class Page extends Model
         "order_search" => 20,
         "employee_registration" => 21,
         "complete_window_inventory" => 22,
+        "complete_window_inventory_search" => 23,
+        "search" => 24,
     ];
 
     protected $guarded = [

@@ -86,7 +86,7 @@ class CwInventoryController extends Controller
     public function searchWindow(Request $request)
     {
         return view("complete_windows_inventory.search")->with([
-            "menu" => ""
+            "menu" => "cwi_search"
         ]);
     }
     
