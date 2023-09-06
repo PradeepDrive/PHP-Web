@@ -245,32 +245,75 @@ class UserController extends Controller
         $rule = [
             "first_name" => "required|string",
             "last_name" => "required|string",
-            "phone" => "required|string",
+            "month" => "required",
+            "day" => "required",
+            "year" => "required",
+            "mailing_address" => "required|string",
+            "address_street_name" => "required|string",
+            "address_city" => "required|string",
+            "postal_code" => "required",
             "email" => "required|email|unique:UserRegistration,Email",
+            "phone" => "required",
+            "phone_2" => "required",
             "emp_id" => "required|string|unique:UserRegistration,EmployeeId",
-            "mailing_address" => "nullable|string",
-            "location" => "required",
-            "department" => "required|numeric|exists:departments,id",
             "affiliated_to" => "required",
+            "department" => "required|numeric|exists:departments,id",
+            "emg_first_name_1" => "required",
+            "emg_last_name_1" => "required",
+            "relation_to_you_1" => "required",
+            "emg_phone_1_1" => "required",
+            "emg_phone_1_2" => "required",
+            "emg_first_name_2" => "required",
+            "emg_last_name_2" => "required",
+            "relation_to_you_2" => "required",
+            "emg_phone_2_1" => "required",
+            "emg_phone_2_2" => "required",
+            "emg_email_1" => "required",
+            "emg_email_2" => "required",
+
         ];
         $message = [
             "emp_id.required" => "Employee id must be required..!",
             "emp_id.unique" => "Employee id has taken already..!"
         ];
         $validator = Validator::make($request->all(), $rule, $message);
-        if ($validator->fails())
+        if ($validator->fails()) {
             return back()->withErrors($validator)->withInput()->with('error_message', $validator->errors()->first());
+        }
+
         DB::statement('SET FOREIGN_KEY_CHECKS=0');
         DB::table('UserRegistration')->insert([
             "FirstName" => $request->first_name,
             "LastName" => $request->last_name,
-            "EmployeeId" => $request->has("emp_id")?$request->emp_id:NULL,
-            "PhoneNumber" => $request->has("phone")?$request->phone:NULL,
-            "Email" => $request->has("email")?$request->email:NULL,
+            "DateOfBirth" => $request->year.'-'.$request->month.'-'.$request->day,
             "MailingAddress" => $request->has("mailing_address")?$request->mailing_address:NULL,
-            "LocationId" => $request->has("location")?$request->location:NULL,
-            "DepartmentId" => $request->has("department")?$request->department:NULL,
+            "Address_Street_Name" => $request->address_street_name,
+            "Address_City" => $request->address_city,
+            "Address_Province" => $request->province,
+            "Address_Postal_Code" => $request->postal_code,
+            "Email" => $request->has("email")?$request->email:NULL,
+            "PhoneNumber" => $request->has("phone")?$request->phone:NULL,
+            "phone_2" => $request->phone_2,
+            "EmployeeId" => $request->has("emp_id")?$request->emp_id:NULL,
             "AffiliatedToId" => $request->has("affiliated_to")?$request->affiliated_to:NULL,
+            "DepartmentId" => $request->has("department")?$request->department:NULL,
+            "LocationId" => $request->has("location")?$request->location:NULL,
+
+            "Emergency_Contact_1_First_Name" => $request->emg_first_name_1,
+            "Emergency_Contact_1_Last_Name" => $request->emg_last_name_1,
+            "Emergency_Contact_1_Relation" => $request->relation_to_you_1,
+            "Emergency_Contact_1_Phone_1" => $request->emg_phone_1_1,
+            "Emergency_Contact_1_Phone_2" => $request->emg_phone_1_2,
+            "Emergency_Contact_1_Email_Address" => $request->emg_email_1,
+
+
+            "Emergency_Contact_2_First_Name" => $request->emg_first_name_2,
+            "Emergency_Contact_2_Last_Name" => $request->emg_last_name_2,
+            "Emergency_Contact_2_Relation" => $request->relation_to_you_2,
+            "Emergency_Contact_2_Phone_1" => $request->emg_phone_2_1,
+            "Emergency_Contact_2_Phone_2" => $request->emg_phone_2_2,
+            "Emergency_Contact_2_Email_Address" => $request->emg_email_2,
+
         ]);
         $request->session()->flash("info_message","User registration has been added successfully.");
         return redirect()->back();
