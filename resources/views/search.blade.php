@@ -146,7 +146,48 @@
                 </div>
             </div>
             <div class="col-6">
-                <!-- Anthor table -->
+                <div class="row display-none" id="glass_report_not_found">
+                    <div class="col-md-12">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-11">
+                            <b>Glass Report</b>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="alert alert-danger mt-3">Not found</div>
+                    </div>
+                </div>
+                <div class="row mt-5 display-none" id="glass_report_div">
+                    <div class="col-12">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-11">
+                            <b>Glass Report</b>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-11">
+                            <table class="table table-bordered border-bottom mt-3" cellpadding="5" style="font-weight: bold;" id="glass_report_tbl">
+                                <thead>
+                                    <tr>
+                                        <td>LINE #1</td>
+                                        <td>QTY</td>
+                                        <td>WIDTH</td>
+                                        <td>HEIGHT</td>
+                                        <td>W.TYPE</td>
+                                        <td>SCAN QUANTITY</td>
+                                        <td>DATE</td>
+                                        <td>TIME</td>
+                                        <td>NAME</td>
+                                        <td>STATUS</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+                                </tbody>
+                            </table>
+                        </div>
+                </div>
             </div>
         </div>
     </div>
@@ -280,8 +321,54 @@
                 $('#order_number_div').addClass('display-none')
             }
            
+
+            //Glass-report
+            var glass_search_param = { order_number: $('#search_item').val() };
+            
+            var glassResponseData = {};
+            $.ajax({
+                url: "{{ route('glass.report') }}",
+                data: glass_search_param,
+                type: "POST",
+                async: false,
+                success: function (dataval) {
+                    glassResponseData = dataval;
+                },
+                error: function (response) {
+                    glassResponseData = 111
+                },
+                failure: function (response) {
+                }
+            });
+
+            if (glassResponseData.data.length > 0) {
+                var table_tr = ''
+                glassResponseData.data.forEach(glassReports => {
+                    table_tr += `<tr>
+                                <td>${glassReports.line1 ? glassReports.line1 : ''}</td>
+                                <td>${glassReports.qty ? glassReports.qty : ''}</td>
+                                <td>${glassReports.width ? glassReports.width : ''}</td>
+                                <td>${glassReports.height ? glassReports.height : ''}</td>
+                                <td>${glassReports.window_type ? glassReports.window_type : ''}</td>
+                                <td>${glassReports.line1 ? glassReports.line1 : ''}</td>
+                                <td>${glassReports.list_date ? glassReports.list_date : ''}</td>
+                                <td>${glassReports.line1 ? glassReports.line1 : ''}</td>
+                                <td>${glassReports.dealer ? glassReports.dealer : ''}</td>
+                                <td>${glassReports.line1 ? glassReports.line1 : ''}</td>
+                            </tr>`
+                });
+                $('#glass_report_tbl tbody').html(table_tr)
+
+                $('#glass_report_div').removeClass('display-none')
+                $('#glass_report_not_found').addClass('display-none')
+            } else {
+                $('#glass_report_not_found').removeClass('display-none')
+                $('#glass_report_div').addClass('display-none')
+            }
+
             $('#search_item').val('')
         });
 
     </script>
 @endsection
+

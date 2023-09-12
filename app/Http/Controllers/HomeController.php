@@ -16,6 +16,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use App\Models\GlassReport;
 
 class HomeController extends Controller
 {
@@ -655,6 +656,21 @@ class HomeController extends Controller
     {
         return view('search')->with([
             'menu' => 'order_window_search',
+        ]);
+    }
+
+    public function getGlassReport(Request $request)
+    {
+        $system_date = getSetting()['system_date'];
+        $glass_reports = GlassReport::where('order', $request->order_number)
+        ->where(function ($query) use ($system_date) {
+            $query->where(DB::raw("STR_TO_DATE(order_date, '%d %M %Y')"), '>', $system_date)
+                  ->orWhere(DB::raw("STR_TO_DATE(order_date, '%d-%M-%Y')"), '>', $system_date);
+        })
+        ->get()->toArray();
+        return response([
+            'status' => 200,
+            "data" => $glass_reports,
         ]);
     }
 }

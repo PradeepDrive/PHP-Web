@@ -147,4 +147,6 @@ Route::group(['middleware' => ["auth"]], function () {
 
     Route::resource('affiliated', 'AffiliatedToController');
     Route::resource('location', 'LocationController');
+    Route::post('get-glass-report', 'HomeController@getGlassReport')->name('glass.report');
+
 });
