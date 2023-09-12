@@ -27,39 +27,21 @@
             {{ session('info_message') }}
         </div>
     @endif
-    <div class="container my-5">
+    <div class="my-5">
         <div class="row">
-            <div class="col-md-6 mt-2" class="">
+            <div class="col-md-3"></div>
+            <div class="col-md-3 mt-2">
                 <input type="number" class="form-control" id="search_item">
                 <span class="w-100 ml-2 small error validation_error"></span>
             </div>
-            <div class="col-md-6 text-center mt-2">
-                <button class="btn btn-dark w-50" id="searchWindow">Search</button>
+            <div class="col-md-3 text-center mt-2">
+                <button class="btn btn-dark" id="searchWindow">Search</button>
             </div>
-        </div>
-        <!-- Search window -->
-        <div class="row mt-5 display-none heading">
-            <h5 class=""><b>Search window</b></h5>
-        </div>
-        <form action="{{ route('upload-request') }}" method="POST">
-            @csrf
-            <div class="alert alert-danger mt-3 display-none" id="search_not_found">Not found</div>
-            <div class="row mt-5 display-none" id="total_window">
-                <table class="table-responsive border-bottom mt-3" cellpadding="5" style="font-weight: bold;">
-                    <tr>
-                        <td>TOTAL WINDOW</td>
-                        <td v-text="total_qty"></td>
-                    </tr>
-                </table>
-                <input type="hidden" name="item_number" id="searched_number">
-                <div class="col-md-6">
-                    <table class="table-responsive border-bottom mt-3" cellpadding="5" id="stock_tbl">
-                    </table>
-                </div>
-                <div class="col-md-6 text-center mt-2">
-
+            <div class="col-md-3 text-center total_window display-none">
+                <form action="{{ route('upload-request') }}" method="POST">
+                @csrf
+                    <input type="hidden" name="item_number" id="searched_number">
                     <div class="form-group">
-
                         <div class="form-group">
                             <button type="submit" class="btn btn-dark w-50">Unload Request</button>
                         </div>
@@ -67,52 +49,107 @@
                             <span class="w-50" id="stock_data"></span>
                         </div>
                     </div>
+                </form>
+            </div>
+        </div>
+        <!-- Search window -->
+        <div class="row display-none" id="search_not_found">
+            <div class="col-md-12">
+                <div class="col-md-1"></div>
+                <div class="col-md-11">
+                    <b>TOTAL WINDOW (Search Window) : 0</b>
                 </div>
             </div>
-        </form>
-        <hr class="dark-line display-none">
-        <!-- Order number search -->
-        <div class="row mt-5 display-none heading">
-            <h5 class=""><b>Order search</b></h5>
-        </div>
-        <div class="alert alert-danger mt-3 display-none" id="order_number_not_found">Not found</div>
-        <div class="row mt-5 display-none" id="order_number_div">
-            <table class="table border-bottom mt-3" cellpadding="5" style="font-weight: bold;">
-                <tr>
-                    <td>Note:</td>
-                    <td v-text="note"></td>
-                </tr>
-                <tr>
-                    <td>Order number:</td>
-                    <td id="order_number_td"></td>
-                    <td></td>
-                    <td>Company Name:</td>
-                    <td id="company_name_td"></td>
-                    <td></td>
-                    <td>Customer PO:</td>
-                    <td id="customer_po_td"></td>
-                </tr>
-            </table>
-            <input type="hidden" name="order_number" v-model="searched_number">
-            <div class="col-md-12">
-                <table class="table table-bordered border-bottom mt-3" cellpadding="5" id="order_tbl">
-                    <thead>
-                        <tr>
-                            <th>Item number</th>
-                            <th>Window Description</th>
-                            <th>Location</th>
-                            <th>Date</th>
-                            <th>Time</th>
-                            <th>Wrapper ID</th>
-                            <th>Shipped</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
+            <div class="col-12">
+                <div class="alert alert-danger mt-3">Not found</div>
             </div>
         </div>
+        <div class="row mt-1 display-none total_window">
+            <div class="col-md-12">
+                <div class="col-md-1"></div>
+                <div class="col-md-11">
+                    <b>TOTAL WINDOW (Search Window) : <span id="total_qty"></span></b>
+                </div>
+            </div>
+            
+            <div class="col-md-12">
+                <div class="col-md-1"></div>
+                <div class="col-md-12">
+                    <div class="row" id="stock_tbl"></div>
+                </div>
+            </div>
+        </div>
+
+        <hr class="dark-line display-none">
+
+        <!-- Order number search -->
+        <div class="row">
+            <div class="col-6">
+                <div class="row display-none" id="order_number_not_found">
+                    <div class="col-md-12">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-11">
+                            <b>Order search</b>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="alert alert-danger mt-3">Not found</div>
+                    </div>
+                </div>
+                <div class="row mt-5 display-none" id="order_number_div">
+                    <div class="col-12">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-11">
+                            <b>Order search</b>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="col-md-1"></div>
+                        <div class="col-md-11">
+                            <table class="table border-bottom mt-3" cellpadding="5" style="font-weight: bold;">
+                                <tr>
+                                    <td>Note:</td>
+                                    <td v-text="note"></td>
+                                </tr>
+                                <tr>
+                                    <td>Order number:</td>
+                                    <td id="order_number_td"></td>
+                                    <td></td>
+                                    <td>Company Name:</td>
+                                    <td id="company_name_td"></td>
+                                    <td></td>
+                                    <td>Customer PO:</td>
+                                    <td id="customer_po_td"></td>
+                                </tr>
+                            </table>
+                            <input type="hidden" name="order_number" v-model="searched_number">
+                            <div class="col-md-12">
+                                <table class="table table-bordered border-bottom mt-3" cellpadding="5" id="order_tbl">
+                                    <thead>
+                                        <tr>
+                                            <th>Item number</th>
+                                            <th>Window Description</th>
+                                            <th>Location</th>
+                                            <th>Date</th>
+                                            <th>Time</th>
+                                            <th>Wrapper ID</th>
+                                            <th>Shipped</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <!-- Anthor table -->
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('script')
@@ -157,33 +194,31 @@
                 var html_td = ''
                 searchWindowResponseData.stocks.forEach(function(stock) {
                         total_qty += stock.qty;
-                        html_td += `<tr>
-                            <td>AISLE</td>
-                            <td>${stock.aisle}</td>
-                        </tr>
-                        <tr>
-                            <td>RACK</td>
-                            <td>${stock.rack_number}</td>
-                        </tr>
-                        <tr>
-                            <td>QTY</td>
-                            <td>${stock.qty}</td>
-                        </tr>`
+                        html_td += `<div class="col-2 mt-1">
+                            <div class="card">
+                                <div class="card-body">
+                                    <p>AISLE ${stock.aisle}</p>
+                                    <p>RACK ${stock.rack_number}</p>
+                                    <p>QTY ${stock.qty}</p>
+                                </div>
+                            </div>
+                        </div>`
                 });
                 if (searchWindowResponseData.total_available == total_qty) {
                     $('#stock_data').css({"background-color" : "#22B14C"})
                 } else {
                     $('#stock_data').css({"background-color" : "#FF7F27"})
                 }
+                $('#total_qty').html(total_qty)
                 $('#stock_data').text(`${total_qty}/${searchWindowResponseData.total_available}`)
                 $('#stock_tbl').html(html_td)
 
                 $('#searched_number').val($('#search_item').val())
-                $('#total_window').removeClass('display-none')
+                $('.total_window').removeClass('display-none')
                 $('#search_not_found').addClass('display-none')
             } else {
                 $('#search_not_found').removeClass('display-none')
-                $('#total_window').addClass('display-none')
+                $('.total_window').addClass('display-none')
             }
 
 

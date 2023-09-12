@@ -139,9 +139,10 @@ class HomeController extends Controller
     {
         $item_number = $request['item_number'];
         $system_date = getSetting()['system_date'];
-        $total_available = WorkOrder::where('LINE #1', 'like', $item_number . '-%')->whereRaw("DATE_FORMAT(STR_TO_DATE(`ORDER DATE`, '%d %M %Y'), '%Y-%m-%d') >= '".$system_date."'")->sum('qty');
+        $total_available = WorkOrder::where('LINE #1', 'like', $item_number . '-%')->whereRaw("DATE_FORMAT(STR_TO_DATE(`ORDER DATE`, '%d %M %Y'), '%Y-%m-%d') > '".$system_date."'")->sum('qty');
         $stocks = Stock::where('item_number', $item_number)
             ->orWhere('item_number', 'like', $item_number . '-%')
+            ->whereDate('created_at', '>', $system_date)
             ->groupBy('rack_number')
             ->select(['*', DB::raw('COUNT(rack_number) as qty')])
             ->get();
@@ -166,10 +167,10 @@ class HomeController extends Controller
     {
         $system_date = getSetting()['system_date'];
         $order_number = $request['order_number'];
-        $orders = WorkOrder::where('ORDER #', '=', $order_number)->whereRaw("DATE_FORMAT(STR_TO_DATE(`ORDER DATE`, '%d %M %Y'), '%Y-%m-%d') >= '".$system_date."'")->get();
+        $orders = WorkOrder::where('ORDER #', '=', $order_number)->whereRaw("DATE_FORMAT(STR_TO_DATE(`ORDER DATE`, '%d %M %Y'), '%Y-%m-%d') > '".$system_date."'")->get();
         foreach ($orders as $row){
             $row['location'] = 'No';
-            $stock = Stock::where('item_number', '=', $row['LINE #1'])->first();
+            $stock = Stock::where('item_number', '=', $row['LINE #1'])->whereDate('created_at', '>', $system_date)->first();
             if ($stock !== null) {
                 $row['location'] = $stock['rack_number'];
                 $row['created_at'] = $stock['created_at'];
@@ -177,7 +178,7 @@ class HomeController extends Controller
                 $row['note'] = $stock['note'];
             }
             // $row['shipped'] = 'No';
-            $windowshipping = WindowShipping::where('Line_number', '=', $row['LINE #1'])->first();
+            $windowshipping = WindowShipping::where('Date', '>', $system_date)->where('Line_number', '=', $row['LINE #1'])->first();
             if ($windowshipping !== null) {
                 $row['shipped'] = 'YES';
             }
