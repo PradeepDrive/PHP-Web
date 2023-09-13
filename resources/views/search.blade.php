@@ -324,37 +324,33 @@
 
             //Glass-report
             var glass_search_param = { order_number: $('#search_item').val() };
-            
             var glassResponseData = {};
-            $.ajax({
+
+            $.ajax ({
+                type: "GET",
                 url: "{{ route('glass.report') }}",
-                data: glass_search_param,
-                type: "POST",
                 async: false,
-                success: function (dataval) {
-                    glassResponseData = dataval;
-                },
-                error: function (response) {
-                    glassResponseData = 111
-                },
-                failure: function (response) {
+                data : glass_search_param,
+                success: function (response) {
+                    glassResponseData = response;
                 }
             });
-
             if (glassResponseData.data.length > 0) {
                 var table_tr = ''
                 glassResponseData.data.forEach(glassReports => {
+                    var original_date = glassReports.date ? glassReports.date.split("-") : ''
+                    var date = original_date[2]+'-'+original_date[1]+'-'+original_date[0]
                     table_tr += `<tr>
                                 <td>${glassReports.line1 ? glassReports.line1 : ''}</td>
                                 <td>${glassReports.qty ? glassReports.qty : ''}</td>
                                 <td>${glassReports.width ? glassReports.width : ''}</td>
                                 <td>${glassReports.height ? glassReports.height : ''}</td>
                                 <td>${glassReports.window_type ? glassReports.window_type : ''}</td>
-                                <td>${glassReports.line1 ? glassReports.line1 : ''}</td>
-                                <td>${glassReports.list_date ? glassReports.list_date : ''}</td>
-                                <td>${glassReports.line1 ? glassReports.line1 : ''}</td>
-                                <td>${glassReports.dealer ? glassReports.dealer : ''}</td>
-                                <td>${glassReports.line1 ? glassReports.line1 : ''}</td>
+                                <td>${glassReports.scan_qty ? glassReports.scan_qty : ''}</td>
+                                <td>${date ? date : ''}</td>
+                                <td>${glassReports.time ? glassReports.time.split(".")[0] : ''}</td>
+                                <td>${glassReports.name ? glassReports.name : ''}</td>
+                                <td style="background:${glassReports.color};">${glassReports.status ? glassReports.status : ''}</td>
                             </tr>`
                 });
                 $('#glass_report_tbl tbody').html(table_tr)

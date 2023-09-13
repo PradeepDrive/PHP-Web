@@ -17,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\GlassReport;
+use App\Models\WindowsAssembly;
 
 class HomeController extends Controller
 {
@@ -668,9 +669,42 @@ class HomeController extends Controller
                   ->orWhere(DB::raw("STR_TO_DATE(order_date, '%d-%M-%Y')"), '>', $system_date);
         })
         ->get()->toArray();
+        $line3 = collect($glass_reports)->pluck('line3')->toArray();
+        $windows_assembly = WindowsAssembly::whereIn('Line_number', $line3)->whereDate('Date', '>', $system_date)->get()->toArray();
+
+        $glass_reports_groupBy_line3 = collect($glass_reports)->groupBy('line3')->toArray();
+        $data = array();
+        foreach ($glass_reports_groupBy_line3 as $line_number => $glass_reports) {
+            $collect_windows_assembly = collect($windows_assembly)->where('Line_number', $line_number)->first();
+            $qty = 0;
+            foreach ($glass_reports as $glass_report) {
+                $report_data['line1']          = $glass_report['line3'];
+                $report_data['width']          = $glass_report['width'];
+                $report_data['height']         = $glass_report['height'];
+                $report_data['window_type']    = $glass_report['window_type'];
+                $qty = $qty + $glass_report['qty'];
+            }
+            $report_data['qty']        = $qty;
+            $report_data['scan_qty']   = collect($windows_assembly)->where('Line_number', $line_number)->count();
+            $report_data['date']       = @$collect_windows_assembly['Date'];
+            $report_data['time']       = @$collect_windows_assembly['Time'];
+            $report_data['name']       = @$collect_windows_assembly['Name'];
+
+            if ($report_data['qty'] == $report_data['scan_qty']) {
+                $report_data['status'] = 'Completed';
+                $report_data['color'] = 'green';
+            } else if ($report_data['qty'] != 0 && $report_data['scan_qty'] != 0) {
+                $report_data['status'] = 'Processing';
+                $report_data['color'] = 'yellow';
+            } else {
+                $report_data['status'] = 'Yet to start';
+                $report_data['color'] = 'red';
+            }
+            $data[] = $report_data;
+        }
         return response([
             'status' => 200,
-            "data" => $glass_reports,
+            "data" => $data,
         ]);
     }
 }
