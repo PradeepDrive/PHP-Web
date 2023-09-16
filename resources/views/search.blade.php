@@ -13,10 +13,14 @@
             display: none;
         }
         hr.dark-line {
-      border: none; /* Remove the default border */
-      height: 2px;   /* Set the height of the line */
-      background-color: #000; /* Set the background color to black (or any dark color you prefer) */
-    }
+            border: none; /* Remove the default border */
+            height: 2px;   /* Set the height of the line */
+            background-color: #000; /* Set the background color to black (or any dark color you prefer) */
+        }
+        .bottomdiv {
+            position:absolute; 
+            bottom:0;
+        }
     </style>
 @endsection
 
@@ -29,7 +33,8 @@
     @endif
     <div class="my-5">
         <div class="row">
-            <div class="col-md-3"></div>
+            <div class="col-md-3 text-bottom">
+            </div>
             <div class="col-md-3 mt-2">
                 <input type="number" class="form-control" id="search_item">
                 <span class="w-100 ml-2 small error validation_error"></span>
@@ -45,9 +50,17 @@
                         <div class="form-group">
                             <button type="submit" class="btn btn-dark w-50">Unload Request</button>
                         </div>
-                        <div class="stock_count font-weight-bolder text-center">
-                            <span class="w-50" id="stock_data"></span>
-                        </div>
+                    </div>
+            </div>
+            <div class="col-md-9 display-none total_window">
+                <div class="col-md-1"></div>
+                <div class=" col-md-11 bottomdiv">
+                    <b>TOTAL WINDOWS : <span id="total_qty"></span></b>
+                </div>
+            </div>
+            <div class="col-md-3 display-none total_window">
+                    <div class="stock_count font-weight-bolder text-center">
+                        <span class="w-50" id="stock_data"></span>
                     </div>
                 </form>
             </div>
@@ -57,7 +70,7 @@
             <div class="col-md-12">
                 <div class="col-md-1"></div>
                 <div class="col-md-11">
-                    <b>TOTAL WINDOW (Search Window) : 0</b>
+                    <b>TOTAL WINDOWS</b>
                 </div>
             </div>
             <div class="col-12">
@@ -65,13 +78,6 @@
             </div>
         </div>
         <div class="row mt-1 display-none total_window">
-            <div class="col-md-12">
-                <div class="col-md-1"></div>
-                <div class="col-md-11">
-                    <b>TOTAL WINDOW (Search Window) : <span id="total_qty"></span></b>
-                </div>
-            </div>
-            
             <div class="col-md-12">
                 <div class="col-md-1"></div>
                 <div class="col-md-12">
@@ -89,7 +95,7 @@
                     <div class="col-md-12">
                         <div class="col-md-1"></div>
                         <div class="col-md-11">
-                            <b>Order search</b>
+                            <b>Note</b>
                         </div>
                     </div>
                     <div class="col-12">
@@ -97,12 +103,6 @@
                     </div>
                 </div>
                 <div class="row mt-5 display-none" id="order_number_div">
-                    <div class="col-12">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-11">
-                            <b>Order search</b>
-                        </div>
-                    </div>
                     <div class="col-12">
                         <div class="col-md-1"></div>
                         <div class="col-md-11">
@@ -150,7 +150,7 @@
                     <div class="col-md-12">
                         <div class="col-md-1"></div>
                         <div class="col-md-11">
-                            <b>Glass Report</b>
+                            <b>Window Assembly</b>
                         </div>
                     </div>
                     <div class="col-12">
@@ -161,12 +161,17 @@
                     <div class="col-12">
                         <div class="col-md-1"></div>
                         <div class="col-md-11">
-                            <b>Glass Report</b>
+                            <table class="table border-bottom mt-3" cellpadding="5" style="font-weight: bold;">
+                                <tr>
+                                    <td>Window Assembly</td>
+                                </tr>
+                                <tr>
+                                    <td>Recut not:</td>
+                                    <td id="window_assembly_data" class="text-danger"></td>
+                                </tr>
+                            </table>
                         </div>
-                    </div>
-                    <div class="col-12">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-11">
+                        <div class="col-md-12">
                             <table class="table table-bordered border-bottom mt-3" cellpadding="5" style="font-weight: bold;" id="glass_report_tbl">
                                 <thead>
                                     <tr>
@@ -187,10 +192,10 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 @endsection
 
 @section('script')
@@ -235,12 +240,12 @@
                 var html_td = ''
                 searchWindowResponseData.stocks.forEach(function(stock) {
                         total_qty += stock.qty;
-                        html_td += `<div class="col-2 mt-1">
+                        html_td += `<div class="col-2 mt-4">
                             <div class="card">
                                 <div class="card-body">
-                                    <p>AISLE ${stock.aisle}</p>
-                                    <p>RACK ${stock.rack_number}</p>
-                                    <p>QTY ${stock.qty}</p>
+                                    <p><b>AISLE ${stock.aisle}</b></p>
+                                    <p><b>RACK ${stock.rack_number}</b></p>
+                                    <p class="float-right"><b>QTY ${stock.qty}</b></p>
                                 </div>
                             </div>
                         </div>`
@@ -361,7 +366,18 @@
                 $('#glass_report_not_found').removeClass('display-none')
                 $('#glass_report_div').addClass('display-none')
             }
+            var window_assembly_data = ''
+            if (glassResponseData.additional_data.GlassRecut) {
+                var data = glassResponseData.additional_data.GlassRecut
+                window_assembly_data += `Frame: ${data.Date} ${data.Reason}/${data.Name}` 
+            }
 
+            if (glassResponseData.additional_data.FrameRecut) {
+                var data = glassResponseData.additional_data.FrameRecut
+                window_assembly_data += " ";
+                window_assembly_data += `Glass: ${data.Date} ${data.Reason}/${data.Name}` 
+            }
+            $('#window_assembly_data').html(window_assembly_data)
             $('#search_item').val('')
         });
 

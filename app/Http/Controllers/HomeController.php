@@ -702,9 +702,12 @@ class HomeController extends Controller
             }
             $data[] = $report_data;
         }
+        $additional_data['FrameRecut'] = DB::table('FrameRecut')->where('Order_number', $request->order_number)->first();
+        $additional_data['GlassRecut'] = DB::table('GlassRecut')->where('Order_number', $request->order_number)->first();
         return response([
             'status' => 200,
             "data" => $data,
+            "additional_data" => $additional_data,
         ]);
     }
 }
