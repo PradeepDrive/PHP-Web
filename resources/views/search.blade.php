@@ -108,11 +108,11 @@
                         <div class="col-md-11">
                             <table class="table border-bottom mt-3" cellpadding="5" style="font-weight: bold;">
                                 <tr>
-                                    <td>Note:</td>
+                                    <td colspan="8">Note:</td>
                                     <td v-text="note"></td>
                                 </tr>
                                 <tr>
-                                    <td>Order number:</td>
+                                    <td colspan="2">Order number:</td>
                                     <td id="order_number_td"></td>
                                     <td></td>
                                     <td>Company Name:</td>
@@ -159,15 +159,17 @@
                 </div>
                 <div class="row mt-5 display-none" id="glass_report_div">
                     <div class="col-12">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-11">
+                        <!-- <div class="col-md-1"></div> -->
+                        <div class="col-md-12">
                             <table class="table border-bottom mt-3" cellpadding="5" style="font-weight: bold;">
                                 <tr>
-                                    <td>Window Assembly</td>
+                                    <td colspan="10">Window Assembly</td>
+                                    <td colspan="5"></td>
                                 </tr>
                                 <tr>
-                                    <td>Recut not:</td>
+                                    <td colspan="10">Recut note:</td>
                                     <td id="window_assembly_data" class="text-danger"></td>
+                                    <td colspan="5"></td>
                                 </tr>
                             </table>
                         </div>
