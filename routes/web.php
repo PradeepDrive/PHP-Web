@@ -143,10 +143,14 @@ Route::group(['middleware' => ["auth"]], function () {
 
     Route::group([  'middleware' => 'access:' . Page::PAGES["search"]], function () {
         Route::get('search', 'HomeController@search')->name('search');
+        Route::get('get-glass-report', 'HomeController@getGlassReport')->name('glass.report');
+        Route::get('search-window', 'HomeController@searchWindow')->name('search-window');
+        Route::post('search-window', 'HomeController@postSearchWindow');
+        Route::get('order-search', 'HomeController@searchOrder')->name('order-search');
+        Route::post('order-search', 'HomeController@postSearchOrder');
     });
 
     Route::resource('affiliated', 'AffiliatedToController');
     Route::resource('location', 'LocationController');
-    Route::get('get-glass-report', 'HomeController@getGlassReport')->name('glass.report');
 
 });
