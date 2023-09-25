@@ -31,7 +31,7 @@
             {{ session('info_message') }}
         </div>
     @endif
-    <div class="my-5">
+    <div class="container my-5">
         <div class="row">
             <div class="col-md-3 text-bottom">
             </div>
@@ -92,7 +92,7 @@
 
         <!-- Order number search -->
         <div class="row">
-            <div class="col-6">
+            <div class="col-12">
                 <div class="row display-none" id="order_number_not_found">
                     <div class="col-md-12">
                         <div class="col-md-1"></div>
@@ -106,8 +106,7 @@
                 </div>
                 <div class="row mt-5 display-none" id="order_number_div">
                     <div class="col-12">
-                        <div class="col-md-1"></div>
-                        <div class="col-md-11">
+                        <div class="col-md-12">
                             <table class="table border-bottom mt-3" cellpadding="5" style="font-weight: bold;">
                                 <tr>
                                     <td colspan="8">Note:</td>
@@ -147,7 +146,11 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+            <div class="col-12">
+                <hr class="dark-line display-none">
+            </div>
+
+            <div class="col-12">
                 <div class="row display-none" id="glass_report_not_found">
                     <div class="col-md-12">
                         <div class="col-md-1"></div>
