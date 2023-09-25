@@ -22,7 +22,7 @@
                     <th>QTY</th>
                     <th>DATE</th>
                     <th>TIME</th>
-                    <th>Supplier Name</th>
+                    <th>Shipper Name</th>
                     <th>Action</th>
                 </tr>
                 </thead>
@@ -53,7 +53,7 @@
                     <th>QTY</th>
                     <th>DATE</th>
                     <th>TIME</th>
-                    <th>Supplier Name</th>
+                    <th>Shipper Name</th>
                     <th>Action</th>
                 </tr>
                 </tfoot>

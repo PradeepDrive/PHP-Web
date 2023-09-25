@@ -388,7 +388,7 @@
 
         $('#upload-request-btn').click(async function(event) {
             var contacts = $('#contacts_list').val()
-            const { value: fruit } = await Swal.fire({
+            const { value: user } = await Swal.fire({
                 title: 'Select User',
                 input: 'select',
                 inputOptions: JSON.parse(contacts),
@@ -405,8 +405,8 @@
                 }
             })
 
-            if (fruit) {
-                $('#shipper_id').val(fruit)
+            if (user) {
+                $('#shipper_id').val(user)
                 $('#upload-request-form').submit()
             }
         })
