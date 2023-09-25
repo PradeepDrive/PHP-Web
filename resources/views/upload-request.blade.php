@@ -19,11 +19,11 @@
                     <th></th>
                     <th>AISLE</th>
                     <th>RACK</th>
-
                     <th>QTY</th>
                     <th>DATE</th>
                     <th>TIME</th>
-                    <th style="width: 70px;">Action</th>
+                    <th>Supplier Name</th>
+                    <th>Action</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -35,8 +35,10 @@
                     <td v-text="upload.qty"></td>
                     <td v-text="upload.date"></td>
                     <td v-text="upload.time"></td>
+                    <td v-text="upload.shipper_id"></td>
                     <td>
                         <a href="javascript:void(0);" @click="deleteRecord(upload.id)" class="btn btn-danger">CLEAR</a>
+                        <a href="javascript:void(0);"  class="btn btn-success">COMPLETED</a>
                     </td>
                 </tr>
                 <tr :class="{'d-none' : uploads.length > 0}">
@@ -51,6 +53,7 @@
                     <th>QTY</th>
                     <th>DATE</th>
                     <th>TIME</th>
+                    <th>Supplier Name</th>
                     <th>Action</th>
                 </tr>
                 </tfoot>

@@ -43,12 +43,14 @@
                 <button class="btn btn-dark" id="searchWindow">Search</button>
             </div>
             <div class="col-md-3 text-center total_window display-none">
-                <form action="{{ route('upload-request') }}" method="POST">
+                <form action="{{ route('upload-request') }}" method="POST" id="upload-request-form">
                 @csrf
                     <input type="hidden" name="item_number" id="searched_number">
+                    <input type="hidden" name="shipper_id" id="shipper_id">
+
                     <div class="form-group">
                         <div class="form-group">
-                            <button type="submit" class="btn btn-dark w-50">Unload Request</button>
+                            <button type="button" class="btn btn-dark w-50" id="upload-request-btn">Unload Request</button>
                         </div>
                     </div>
             </div>
@@ -198,6 +200,7 @@
                 </div>
             </div>
         </div>
+        <input type="hidden" name="contacts_list" id="contacts_list" value="{{ @$contacts_list }}">
 @endsection
 
 @section('script')
@@ -383,6 +386,30 @@
             $('#search_item').val('')
         });
 
+        $('#upload-request-btn').click(async function(event) {
+            var contacts = $('#contacts_list').val()
+            const { value: fruit } = await Swal.fire({
+                title: 'Select User',
+                input: 'select',
+                inputOptions: JSON.parse(contacts),
+                inputPlaceholder: '----Select----',
+                showCancelButton: true,
+                inputValidator: (value) => {
+                    return new Promise((resolve) => {
+                    if (value) {
+                        resolve()
+                    } else {
+                        resolve('You need to choose the user :)')
+                    }
+                    })
+                }
+            })
+
+            if (fruit) {
+                $('#shipper_id').val(fruit)
+                $('#upload-request-form').submit()
+            }
+        })
     </script>
 @endsection
 

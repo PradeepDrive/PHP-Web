@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class StockUpload extends Model
 {
     protected $fillable = [
-        'rack_number', 'qty', 'created_at', 'updated_at'
+        'rack_number', 'qty', 'created_at', 'updated_at', 'shipper_id'
     ];
 }

@@ -89,6 +89,7 @@
                     <a class="btn btn-dark mr-5" href="{{ route('location.index') }}">Location</a>
                     <a class="btn btn-dark mr-5" href="{{ route('affiliated.index') }}">AffiliatedTo</a>
                     <a class="btn btn-dark mr-5" href="{{ route('department.index') }}">Departments</a>
+                    <a class="btn btn-dark mr-5" href="{{ route('contacts.index') }}">Contacts</a>
                     <a class="btn btn-dark" href="{{ route('dealer.login') }}">Dealer login</a>
                 @endif
             </div>

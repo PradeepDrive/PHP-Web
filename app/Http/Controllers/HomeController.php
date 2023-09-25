@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use App\Models\GlassReport;
 use App\Models\WindowsAssembly;
+use App\Models\Contacts;
 
 class HomeController extends Controller
 {
@@ -225,6 +226,7 @@ class HomeController extends Controller
             StockUpload::updateOrCreate([
                 'rack_number' => $stock['rack_number'],
                 'deleted' => 0,
+                'shipper_id' => $request['shipper_id'],
             ], [
                 'qty' => $stock['qty'],
             ]);
@@ -534,6 +536,7 @@ class HomeController extends Controller
             $upload['rack_number'] = substr($upload['rack_number'], 1);
             $upload['date'] = date('Y-m-d', strtotime($upload['created_at']));
             $upload['time'] = date('h:i:s a', strtotime($upload['created_at']));
+            $upload['shipper_id'] = @$upload['shipper_id'] ? Contacts::whereId($upload['shipper_id'])->first()->name : '';
         }
         return response([
             'uploads' => $uploads,
@@ -655,8 +658,10 @@ class HomeController extends Controller
 
     public function search()
     {
+        $contacts_list = Contacts::pluck('name', 'id')->toArray();
         return view('search')->with([
             'menu' => 'order_window_search',
+            'contacts_list' => json_encode($contacts_list)
         ]);
     }
 

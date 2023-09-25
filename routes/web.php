@@ -151,6 +151,7 @@ Route::group(['middleware' => ["auth"]], function () {
     });
 
     Route::resource('affiliated', 'AffiliatedToController');
+    Route::resource('contacts', 'ContactsController');
     Route::resource('location', 'LocationController');
 
 });
