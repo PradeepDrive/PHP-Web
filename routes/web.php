@@ -144,10 +144,9 @@ Route::group(['middleware' => ["auth"]], function () {
     Route::group([  'middleware' => 'access:' . Page::PAGES["search"]], function () {
         Route::get('search', 'HomeController@search')->name('search');
         Route::get('get-glass-report', 'HomeController@getGlassReport')->name('glass.report');
-        Route::get('search-window', 'HomeController@searchWindow')->name('search-window');
-        Route::post('search-window', 'HomeController@postSearchWindow');
-        Route::get('order-search', 'HomeController@searchOrder')->name('order-search');
-        Route::post('order-search', 'HomeController@postSearchOrder');
+        Route::post('search-search-window', 'HomeController@postSearchWindow')->name('search.search-window-post');
+        Route::post('search-order-search', 'HomeController@postSearchOrder')->name('search.order-search-post');
+        Route::post('search-upload-request', 'HomeController@postUploadRequest')->name('search.upload-request');
     });
 
     Route::group(['middleware' => 'access:' . Page::PAGES["settings"]], function () {

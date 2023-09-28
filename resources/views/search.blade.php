@@ -43,7 +43,7 @@
                 <button class="btn btn-dark" id="searchWindow">Search</button>
             </div>
             <div class="col-md-3 text-center total_window display-none">
-                <form action="{{ route('upload-request') }}" method="POST" id="upload-request-form">
+                <form action="{{ route('search.upload-request') }}" method="POST" id="upload-request-form">
                 @csrf
                     <input type="hidden" name="item_number" id="searched_number">
                     <input type="hidden" name="shipper_id" id="shipper_id">
@@ -228,7 +228,7 @@
             
             var searchWindowResponseData = {};
             $.ajax({
-                url: "{{ route('search-window') }}",
+                url: "{{ route('search.search-window-post') }}",
                 data: search_window_param,
                 type: "POST",
                 async: false,
@@ -281,7 +281,7 @@
             
             var orderSearchResponseData = {};
             $.ajax({
-                url: "{{ route('order-search') }}",
+                url: "{{ route('search.order-search-post') }}",
                 data: order_search_param,
                 type: "POST",
                 async: false,
