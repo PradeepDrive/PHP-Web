@@ -79,22 +79,6 @@ $(function(){
     buttonClass:'form-control',
 
   });
-  
-//   $('#id_number').flexdatalist({
-//         cache: false,
-//         keywordParamName: "search_value",
-//         minLength: 0,
-//         searchContain: true,
-//         visibleProperties: ["LINE #1"],
-//         searchIn: ["LINE #1"],
-//         textProperty: '{LINE #1}',
-//         url: "{{ route('cwi.id_search') }}",
-//         noResultsText: 'no record founded'
-//     })
-//     .on('select:flexdatalist', async function(event, items) {
-//         // let pasient_access_log = await AJAX.AjaxHelper.POSTRequest(`${patientJournalLogUrl}?pasient_id=${items.id}`, false, false);
-//         // window.location.href = '/patient/'+ items.id;
-//     });
 });
     </script>
 @endsection

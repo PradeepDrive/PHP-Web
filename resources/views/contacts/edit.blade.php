@@ -36,15 +36,22 @@
                 <div class="row form-group mt-3">
                     <label for="phone_number" class="col-sm-4 font-weight-bold">Phone number:<span class="required">*</span></label>
                      <div class="col-sm-8 ">
-                         <input type="text" id="phone_number" name="phone_number" placeholder="Enter Contact Phone Number" value="{{$edit->phone_number}}" required="required" class="form-control"/>
+                        <div class="row">
+                            <div class="col-2">
+                                <input type="text" name="code_number" value="+1" disabled="disabled" class="form-control"/>
+                            </div>
+                            <div class="col-10">
+                                <input type="text" id="phone_number" name="phone_number" placeholder="Enter Contact Phone Number" value="{{$edit->phone_number}}" required="required" class="form-control"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 
 
                 <div class=" form-group mt-3 text-center">
                     <button type="submit" class="btn btn-dark text-light"> Submit </button>
+                    <a href="{{ route('contacts.index') }}" class="btn btn-primary text-light">BACK</a>
                 </div>
-
             </form>
         </div>
     </div>

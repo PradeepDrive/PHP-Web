@@ -40,10 +40,6 @@
         integrity="sha512-ljeReA8Eplz6P7m1hwWa+XdPmhawNmo9I0/qyZANCCFvZ845anQE+35TuZl9+velym0TKanM2DXVLxSJLLpQWw=="
         crossorigin="anonymous"></script>
 
-    <!-- Flexdata urls -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-flexdatalist/2.3.0/jquery.flexdatalist.min.js" integrity="sha512-JEX6Es4Dhu4vQWWA+vVBNJzwejdpqeGeii0sfiWJbBlAfFzkeAy6WOxPYA4HEVeCHwAPa+8pDZQt8rLKDDGHgw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-flexdatalist/2.3.0/jquery.flexdatalist.css" integrity="sha512-mVj7k7kIC4+FkO7xQ04Di4Q4vSg8BP3HA7Pzss2ib+EqufKS5GuJW1mGtVo70i9hHTgEv6UmxcPb6tddRdk89A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    
     <!-- Sweet alerts -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.28/sweetalert2.min.js" integrity="sha512-CyYoxe9EczMRzqO/LsqGsDbTl3wBj9lvLh6BYtXzVXZegJ8VkrKE90fVZOk1BNq3/9pyg+wn+TR3AmDuRjjiRQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.28/sweetalert2.min.css" integrity="sha512-IScV5kvJo+TIPbxENerxZcEpu9VrLUGh1qYWv6Z9aylhxWE4k4Fch3CHl0IYYmN+jrnWQBPlpoTVoWfSMakoKA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -186,7 +182,7 @@
                 @endif
 
                 @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.settings'))->first())
-                    <li class="nav-item @if ($menu == 'setting' || $menu == 'departments' || $menu == 'affiliatedto' || $menu == 'location' || $menu == 'contacts') active @endif">
+                    <li class="nav-item @if ($menu == 'setting' || $menu == 'departments' || $menu == 'affiliatedto' || $menu == 'location' || $menu == 'contacts' || $menu == 'text_api') active @endif">
                         <a class="nav-link" href="{{ route('settings') }}">Settings</a>
                     </li>
                 @endif

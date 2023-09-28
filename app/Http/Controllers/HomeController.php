@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\GlassReport;
 use App\Models\WindowsAssembly;
 use App\Models\Contacts;
+use App\Models\TextAPI;
 
 class HomeController extends Controller
 {
@@ -523,8 +524,10 @@ class HomeController extends Controller
 
     public function uploadRequest()
     {
+        $text_api = TextAPI::first();
         return view('upload-request')->with([
             'menu' => 'upload',
+            'config_text' => $text_api
         ]);
     }
 
@@ -536,7 +539,7 @@ class HomeController extends Controller
             $upload['rack_number'] = substr($upload['rack_number'], 1);
             $upload['date'] = date('Y-m-d', strtotime($upload['created_at']));
             $upload['time'] = date('h:i:s a', strtotime($upload['created_at']));
-            $upload['shipper_id'] = @$upload['shipper_id'] ? Contacts::whereId($upload['shipper_id'])->first()->name : '';
+            $upload['shipper_id'] = @$upload['shipper_id'] ? Contacts::whereId($upload['shipper_id'])->first() : '';
         }
         return response([
             'uploads' => $uploads,

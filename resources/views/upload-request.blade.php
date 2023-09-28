@@ -35,10 +35,12 @@
                     <td v-text="upload.qty"></td>
                     <td v-text="upload.date"></td>
                     <td v-text="upload.time"></td>
-                    <td v-text="upload.shipper_id"></td>
+                    <td v-text="upload.shipper_id.name"></td>
                     <td>
                         <a href="javascript:void(0);" @click="deleteRecord(upload.id)" class="btn btn-danger">CLEAR</a>
-                        <a href="javascript:void(0);"  class="btn btn-success">COMPLETED</a>
+                        @if (@$config_text)
+                            <a href="javascript:void(0);" @click="sendSMS(upload.id, upload.shipper_id.phone_number)" class="btn btn-success">COMPLETED</a>
+                        @endif
                     </td>
                 </tr>
                 <tr :class="{'d-none' : uploads.length > 0}">
@@ -58,6 +60,7 @@
                 </tr>
                 </tfoot>
             </table>
+            <input type="hidden" id="config_text" value="{{ json_encode($config_text) }}">
         </div>
     </div>
 </div>
@@ -86,6 +89,30 @@
                     var msg = "Are you sure delete " + (id == 0 ? "all" : "this") + " record?";
                     if (confirm(msg)) {
                         window.location.href="{{ URL::to('delete-upload') }}/" + id;
+                    }
+                },
+                sendSMS : async function (id, phone_number) {
+                    var config_text = JSON.parse($('#config_text').val())
+                    const resp = await fetch(
+                        config_text['text_url'],
+                        {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Authorization: `Bearer ${config_text['token']}`
+                        },
+                        body: JSON.stringify({
+                            from: '+1'+config_text['from'],
+                            text: config_text['message'],
+                            to: "+1"+phone_number,
+                        })
+                        }
+                    );
+                    const result = await resp.json();
+                    if (result.errors) {
+                        alert("SMS has not sent sucessfully. Please check you credential or contact phone number.")             
+                    } else {
+                        alert("SMS has been sent sucessfully..!")             
                     }
                 }
             },
@@ -118,5 +145,6 @@
         body: data.message
       })
     });
+    
   </script>
 @endsection

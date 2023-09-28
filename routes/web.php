@@ -150,8 +150,17 @@ Route::group(['middleware' => ["auth"]], function () {
         Route::post('order-search', 'HomeController@postSearchOrder');
     });
 
-    Route::resource('affiliated', 'AffiliatedToController');
-    Route::resource('contacts', 'ContactsController');
-    Route::resource('location', 'LocationController');
+    Route::group(['middleware' => 'access:' . Page::PAGES["settings"]], function () {
+        Route::resource('affiliated', 'AffiliatedToController');
+        Route::resource('contacts', 'ContactsController');
+        Route::resource('location', 'LocationController');
+        Route::resource('text-api', 'TextAPIController');
+
+        Route::get('text-api', 'TextAPIController@textAPIForm')->name('text-api.form');
+        Route::post('text-api-store', 'TextAPIController@textAPIStore')->name('text-api.store');
+        Route::get('text-api-destory', 'TextAPIController@textAPIDestory')->name('text-api.destory');
+
+
+    });
 
 });
