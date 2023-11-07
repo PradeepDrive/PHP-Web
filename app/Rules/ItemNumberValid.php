@@ -42,8 +42,8 @@ class ItemNumberValid implements Rule
             } else {
                 $item_count[$item] = $item_count[$item] + 1;
             }
-
-            $current = Stock::where('item_number', $item)->count();
+            $system_date = getSetting()['system_date'];
+            $current = Stock::where('item_number', $item)->whereDate('created_at', '>=', $system_date)->count();
 
             $workorder = WorkOrder::where('LINE #1', $item)->get();
 
