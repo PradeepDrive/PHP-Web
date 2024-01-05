@@ -242,7 +242,7 @@
                 @endif
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('logout') }}"
+                    <a class="nav-link" id="logout_menu" href="{{ route('logout') }}"
                         onclick="event.preventDefault();
                               document.getElementById('logout-form').submit();">
                         {{ __('Logout') }}
@@ -270,6 +270,13 @@
                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
             }
         });
+
+        $(document).ready( function() {
+            var timeout = 5 * 60 * 1000
+            setTimeout(() => {
+                $('#logout_menu').trigger('click')
+            }, timeout);
+        })
     </script>
     @yield('script')
 </body>
