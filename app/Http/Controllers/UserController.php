@@ -76,6 +76,7 @@ class UserController extends Controller
         $validator = Validator::make($request->all(), $rule);
         if ($validator->fails())
             return back()->withErrors($validator)->withInput()->with('error_message', $validator->errors()->first());
+
         $user = User::create([
             "first_name" => $request->first_name,
             "last_name" => $request->last_name,
@@ -88,6 +89,7 @@ class UserController extends Controller
             "mailing_address" => $request->has("mailing_address")?$request->mailing_address:NULL,
             "affiliated_to" => $request->has("affiliated_to")?$request->affiliated_to:NULL,
             "department_id" => $request->has("department")?$request->department:NULL,
+            "remember_me" => $request->has("remember_me")? 1 : 0,
         ]);
 
         $user->pagesAccess()->sync($request->access);
@@ -173,6 +175,7 @@ class UserController extends Controller
         $user->last_name = $request->last_name;
         $user->username = $request->username;
         $user->landing_page = $request->landing_page;
+        $user->remember_me = @$request->remember_me ? 1 : 0;
 
         if($request->has("phone") && !empty($request->phone) ){
             $user->phone = $request->phone;

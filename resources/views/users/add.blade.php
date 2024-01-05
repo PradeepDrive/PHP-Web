@@ -141,7 +141,12 @@
                          <span class="w-100 ml-2 small font-italic">make sure you have given this page access to the user</span>
                     </div>
                 </div>
-
+                <div class="row form-group mt-3">
+                    <label for="remember" class="col-sm-5 font-weight-bold">Enable remember me:</label>
+                     <div class="col-sm-7">
+                        <input class="form-check-input" type="checkbox" name="remember_me" id="remember_me" {{ old('remember_me') ? 'checked' : '' }}>
+                    </div>
+                </div>
                 <div class=" form-group mt-3 text-center">
                     <button type="submit" class="btn btn-dark text-light"> Submit </button>
                 </div>

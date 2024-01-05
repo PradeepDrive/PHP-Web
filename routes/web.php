@@ -1,5 +1,7 @@
 <?php
 use App\Models\Page;
+use App\Http\Controllers\Auth\LoginController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -163,3 +165,5 @@ Route::group(['middleware' => ["auth"]], function () {
     });
 
 });
+
+Route::get('verify-remember-me', [LoginController::class, 'verifyRememberMe'])->name('login.verify-remember-me');

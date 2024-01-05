@@ -53,6 +53,7 @@ class CwInventoryController extends Controller
         $data['CompanyName'] = $work_order['DEALER'];
         $data['CustomerName'] = $work_order['PO'];
         $data['OrderNumber'] = $work_order['ORDER #'];
+        
         DB::table('wrapped_windows')->insert($data);
         $request->session()->flash("info_message", "Data has been saved successfully.");
         session(['data' => $request->all()]);

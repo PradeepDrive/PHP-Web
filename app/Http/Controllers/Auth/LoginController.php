@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Http\Request;
 use Auth;
 use Config;
+use DB;
 
 class LoginController extends Controller
 {
@@ -59,6 +60,11 @@ class LoginController extends Controller
             return redirect()->route('login');
         }
 
+    }
+
+    public function verifyRememberMe(Request $request)
+    {
+        return DB::table('users')->where('username', $request->name)->where('remember_me', 1)->count();
     }
 
 }
