@@ -568,7 +568,8 @@ class HomeController extends Controller
     public function deleteShippedItems()
     {
         $item_numbers = WindowShipping::select("Line_number")->get()->pluck('Line_number')->toArray();
-        Stock::whereIn('item_number', $item_numbers)
+        $system_date = getSetting()['system_date'];
+        Stock::whereIn('item_number', $item_numbers)->whereDate('deleted_at', '>', $system_date)
             ->update([
                 "deleted_at" => now(),
             ]);
