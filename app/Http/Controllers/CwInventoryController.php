@@ -54,6 +54,10 @@ class CwInventoryController extends Controller
         $data['CustomerName'] = $work_order['PO'];
         $data['OrderNumber'] = $work_order['ORDER #'];
         
+        $stocks = DB::table('stocks')->select('rack_number', 'created_at', 'item_number')->where('item_number', $request->id_number)->first();
+        $data['previous_location']  = @$stocks->rack_number ? $stocks->rack_number : '';
+        $data['previous_date']      = @$stocks->created_at ? $stocks->created_at : '';
+
         DB::table('wrapped_windows')->insert($data);
         $request->session()->flash("info_message", "Data has been saved successfully.");
         session(['data' => $request->all()]);
