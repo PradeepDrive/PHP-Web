@@ -58,6 +58,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Worksheet\BaseDrawing;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
+/** @mixin Worksheet */
 class Sheet
 {
     use DelegatedMacroable, HasEventBus;
@@ -191,10 +192,6 @@ class Sheet
         if ($sheetExport instanceof WithCharts) {
             $this->addCharts($sheetExport->charts());
         }
-
-        if ($sheetExport instanceof WithDrawings) {
-            $this->addDrawings($sheetExport->drawings());
-        }
     }
 
     /**
@@ -252,7 +249,6 @@ class Sheet
 
         $calculatesFormulas = $import instanceof WithCalculatedFormulas;
         $formatData         = $import instanceof WithFormatData;
-        $endColumn          = $import instanceof WithColumnLimit ? $import->endColumn() : null;
 
         if ($import instanceof WithMappedCells) {
             app(MappedReader::class)->map($import, $this->worksheet);
@@ -284,16 +280,22 @@ class Sheet
 
         if ($import instanceof OnEachRow) {
             $headingRow          = HeadingRowExtractor::extract($this->worksheet, $import);
+            $headerIsGrouped     = HeadingRowExtractor::extractGrouping($headingRow, $import);
             $endColumn           = $import instanceof WithColumnLimit ? $import->endColumn() : null;
             $preparationCallback = $this->getPreparationCallback($import);
 
             foreach ($this->worksheet->getRowIterator()->resetStart($startRow ?? 1) as $row) {
-                $sheetRow = new Row($row, $headingRow);
+                $sheetRow = new Row($row, $headingRow, $headerIsGrouped);
 
-                if (!$import instanceof SkipsEmptyRows || ($import instanceof SkipsEmptyRows && !$sheetRow->isEmpty($calculatesFormulas))) {
+                if ($import instanceof WithValidation) {
+                    $sheetRow->setPreparationCallback($preparationCallback);
+                }
+
+                $rowArray                    = $sheetRow->toArray(null, $import instanceof WithCalculatedFormulas, $import instanceof WithFormatData, $endColumn);
+                $rowIsEmptyAccordingToImport = $import instanceof SkipsEmptyRows && method_exists($import, 'isEmptyWhen') && $import->isEmptyWhen($rowArray);
+                if (!$import instanceof SkipsEmptyRows || ($import instanceof SkipsEmptyRows && (!$rowIsEmptyAccordingToImport && !$sheetRow->isEmpty($calculatesFormulas)))) {
                     if ($import instanceof WithValidation) {
-                        $sheetRow->setPreparationCallback($preparationCallback);
-                        $toValidate = [$sheetRow->getIndex() => $sheetRow->toArray(null, $import instanceof WithCalculatedFormulas, $import instanceof WithFormatData, $endColumn)];
+                        $toValidate = [$sheetRow->getIndex() => $rowArray];
 
                         try {
                             app(RowValidator::class)->validate($toValidate, $import);
@@ -332,19 +334,24 @@ class Sheet
             return [];
         }
 
-        $endRow     = EndRowFinder::find($import, $startRow, $this->worksheet->getHighestRow());
-        $headingRow = HeadingRowExtractor::extract($this->worksheet, $import);
-        $endColumn  = $import instanceof WithColumnLimit ? $import->endColumn() : null;
+        $endRow          = EndRowFinder::find($import, $startRow, $this->worksheet->getHighestRow());
+        $headingRow      = HeadingRowExtractor::extract($this->worksheet, $import);
+        $headerIsGrouped = HeadingRowExtractor::extractGrouping($headingRow, $import);
+        $endColumn       = $import instanceof WithColumnLimit ? $import->endColumn() : null;
 
         $rows = [];
         foreach ($this->worksheet->getRowIterator($startRow, $endRow) as $index => $row) {
-            $row = new Row($row, $headingRow);
+            $row = new Row($row, $headingRow, $headerIsGrouped);
 
-            if ($import instanceof SkipsEmptyRows && $row->isEmpty($calculateFormulas)) {
+            if ($import instanceof SkipsEmptyRows && $row->isEmpty($calculateFormulas, $endColumn)) {
                 continue;
             }
 
             $row = $row->toArray($nullValue, $calculateFormulas, $formatData, $endColumn);
+
+            if ($import && method_exists($import, 'isEmptyWhen') && $import->isEmptyWhen($row)) {
+                continue;
+            }
 
             if ($import instanceof WithMapping) {
                 $row = $import->map($row);
@@ -388,6 +395,10 @@ class Sheet
      */
     public function close($sheetExport)
     {
+        if ($sheetExport instanceof WithDrawings) {
+            $this->addDrawings($sheetExport->drawings());
+        }
+
         $this->exportable = $sheetExport;
 
         if ($sheetExport instanceof WithColumnFormatting) {
@@ -453,9 +464,34 @@ class Sheet
      */
     public function fromQuery(FromQuery $sheetExport, Worksheet $worksheet)
     {
+        if ($sheetExport->query() instanceof \Laravel\Scout\Builder) {
+            $this->fromScout($sheetExport, $worksheet);
+
+            return;
+        }
+
         $sheetExport->query()->chunk($this->getChunkSize($sheetExport), function ($chunk) use ($sheetExport) {
             $this->appendRows($chunk, $sheetExport);
         });
+    }
+
+    /**
+     * @param  FromQuery  $sheetExport
+     * @param  Worksheet  $worksheet
+     */
+    public function fromScout(FromQuery $sheetExport, Worksheet $worksheet)
+    {
+        $scout     = $sheetExport->query();
+        $chunkSize = $this->getChunkSize($sheetExport);
+
+        $chunk = $scout->paginate($chunkSize);
+        // Append first page
+        $this->appendRows($chunk->items(), $sheetExport);
+
+        // Append rest of pages
+        for ($page = 2; $page <= $chunk->lastPage(); $page++) {
+            $this->appendRows($scout->paginate($chunkSize, 'page', $page)->items(), $sheetExport);
+        }
     }
 
     /**
@@ -528,10 +564,18 @@ class Sheet
      */
     public function formatColumn(string $column, string $format)
     {
-        $this->worksheet
-            ->getStyle($column . '1:' . $column . $this->worksheet->getHighestRow())
-            ->getNumberFormat()
-            ->setFormatCode($format);
+        // If the column is a range, we wouldn't need to calculate the range.
+        if (stripos($column, ':') !== false) {
+            $this->worksheet
+                ->getStyle($column)
+                ->getNumberFormat()
+                ->setFormatCode($format);
+        } else {
+            $this->worksheet
+                ->getStyle($column . '1:' . $column . $this->worksheet->getHighestRow())
+                ->getNumberFormat()
+                ->setFormatCode($format);
+        }
     }
 
     /**
@@ -642,7 +686,7 @@ class Sheet
     }
 
     /**
-     * @param $sheetImport
+     * @param  $sheetImport
      * @return int
      */
     public function getStartRow($sheetImport): int

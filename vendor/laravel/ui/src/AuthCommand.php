@@ -2,8 +2,8 @@
 
 namespace Laravel\Ui;
 
-use InvalidArgumentException;
 use Illuminate\Console\Command;
+use InvalidArgumentException;
 
 class AuthCommand extends Command
 {
@@ -31,6 +31,7 @@ class AuthCommand extends Command
      */
     protected $views = [
         'auth/login.stub' => 'auth/login.blade.php',
+        'auth/passwords/confirm.stub' => 'auth/passwords/confirm.blade.php',
         'auth/passwords/email.stub' => 'auth/passwords/email.blade.php',
         'auth/passwords/reset.stub' => 'auth/passwords/reset.blade.php',
         'auth/register.stub' => 'auth/register.blade.php',
@@ -43,15 +44,20 @@ class AuthCommand extends Command
      * Execute the console command.
      *
      * @return void
+     *
+     * @throws \InvalidArgumentException
      */
     public function handle()
     {
+        if (static::hasMacro($this->argument('type'))) {
+            return call_user_func(static::$macros[$this->argument('type')], $this);
+        }
+
         if (! in_array($this->argument('type'), ['bootstrap'])) {
             throw new InvalidArgumentException('Invalid preset.');
         }
 
         $this->ensureDirectoriesExist();
-
         $this->exportViews();
 
         if (! $this->option('views')) {
@@ -105,15 +111,27 @@ class AuthCommand extends Command
      */
     protected function exportBackend()
     {
-        file_put_contents(
-            app_path('Http/Controllers/HomeController.php'),
-            $this->compileControllerStub()
-        );
+        $this->callSilent('ui:controllers');
+
+        $controller = app_path('Http/Controllers/HomeController.php');
+
+        if (file_exists($controller) && ! $this->option('force')) {
+            if ($this->confirm("The [HomeController.php] file already exists. Do you want to replace it?")) {
+                file_put_contents($controller, $this->compileControllerStub());
+            }
+        } else {
+            file_put_contents($controller, $this->compileControllerStub());
+        }
 
         file_put_contents(
             base_path('routes/web.php'),
             file_get_contents(__DIR__.'/Auth/stubs/routes.stub'),
             FILE_APPEND
+        );
+
+        copy(
+            __DIR__.'/../stubs/migrations/2014_10_12_100000_create_password_resets_table.php',
+            base_path('database/migrations/2014_10_12_100000_create_password_resets_table.php')
         );
     }
 
