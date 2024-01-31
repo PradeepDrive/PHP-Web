@@ -567,61 +567,106 @@ class HomeController extends Controller
 
     public function deleteShippedItems()
     {
-        $item_numbers = WindowShipping::select("Line_number")->get()->pluck('Line_number')->toArray();
         $system_date = getSetting()['system_date'];
-        Stock::whereIn('item_number', $item_numbers)->whereDate('deleted_at', '>', $system_date)
-            ->update([
-                "deleted_at" => now(),
-            ]);
+
+        WindowShipping::chunk(200, function ($windowShippings) use ($system_date) {
+            $item_numbers = $windowShippings->pluck('Line_number')->toArray();
+
+            Stock::whereIn('item_number', $item_numbers)
+                ->whereDate('deleted_at', '>', $system_date)
+                ->update([
+                    "deleted_at" => now(),
+                ]);
+        });
+        // $item_numbers = WindowShipping::select("Line_number")->get()->pluck('Line_number')->toArray();
+        // $system_date = getSetting()['system_date'];
+        // Stock::whereIn('item_number', $item_numbers)->whereDate('deleted_at', '>', $system_date)
+        //     ->update([
+        //         "deleted_at" => now(),
+        //     ]);
     }
+
+    // public function getRackInfo($aisle)
+    // {
+    //     $this->deleteShippedItems();
+    //     $rows = ["A", "B", "C", "G"];
+    //     $aisle = strtoupper($aisle);
+    //     $rackA = $rackB = $rackC = $rackG = [];
+    //     if ($aisle == "G" || $aisle == "H") {
+    //         $end = 425;
+    //     } else if ($aisle == "I" || $aisle == "J") {
+    //         $end = 675;
+    //     } else if ($aisle == "K") {
+    //         $end = 725;
+    //     } else {
+    //         $end = 575;
+    //     }
+    //     for ($i = 100; $i <= $end; $i += 25) {
+    //         for ($j = 0; $j < 4; $j++) {
+    //             $rack = Stock::where('stocks.rack_number', $aisle . $rows[$j] . $i)
+    //                 ->select([DB::raw('SUM(weight) as weight'), DB::raw('COUNT(item_number) as qty'), DB::raw('GROUP_CONCAT(item_number) as item_number')])
+    //                 ->addSelect('capacities.capacity')
+    //                 ->leftJoin('capacities', function ($join) {
+    //                     $join->on('capacities.rack_number', '=', 'stocks.rack_number');
+    //                 })
+    //                 ->groupBy('stocks.rack_number')
+    //                 ->first();
+    //             if (!empty($rack)) {
+    //                 $item_number = [];
+    //                 $items = explode(',', $rack['item_number']);
+    //                 foreach ($items as $item) {
+    //                     $temp = explode('-', $item)[0];
+    //                     if (!in_array($temp, $item_number)) {
+    //                         array_push($item_number, $temp);
+    //                     }
+    //                 }
+    //                 $rack['item_number'] = $item_number;
+    //             }
+    //             if ($j == 0) {
+    //                 $rackA[$i] = $rack;
+    //             } else if ($j == 1) {
+    //                 $rackB[$i] = $rack;
+    //             } else if ($j == 2) {
+    //                 $rackC[$i] = $rack;
+    //             } else {
+    //                 $rackG[$i] = $rack;
+    //             }
+    //         }
+    //     }
+    //     return view('rack-info')->with([
+    //         'menu' => 'rack',
+    //         'aisle' => $aisle,
+    //         'rackA' => $rackA,
+    //         'rackB' => $rackB,
+    //         'rackC' => $rackC,
+    //         'rackG' => $rackG,
+    //         'end' => $end,
+    //     ]);
+    // }
 
     public function getRackInfo($aisle)
     {
         $this->deleteShippedItems();
-        $rows = ["A", "B", "C", "G"];
+
         $aisle = strtoupper($aisle);
+        $rows = ["A", "B", "C", "G"];
         $rackA = $rackB = $rackC = $rackG = [];
-        if ($aisle == "G" || $aisle == "H") {
-            $end = 425;
-        } else if ($aisle == "I" || $aisle == "J") {
-            $end = 675;
-        } else if ($aisle == "K") {
-            $end = 725;
-        } else {
-            $end = 575;
-        }
+
+        $end = $this->calculateEnd($aisle);
+
         for ($i = 100; $i <= $end; $i += 25) {
             for ($j = 0; $j < 4; $j++) {
-                $rack = Stock::where('stocks.rack_number', $aisle . $rows[$j] . $i)
-                    ->select([DB::raw('SUM(weight) as weight'), DB::raw('COUNT(item_number) as qty'), DB::raw('GROUP_CONCAT(item_number) as item_number')])
-                    ->addSelect('capacities.capacity')
-                    ->leftJoin('capacities', function ($join) {
-                        $join->on('capacities.rack_number', '=', 'stocks.rack_number');
-                    })
-                    ->groupBy('stocks.rack_number')
-                    ->first();
+                $rackNumber = $aisle . $rows[$j] . $i;
+                $rack = $this->getRackInfoByNumber($rackNumber);
+
                 if (!empty($rack)) {
-                    $item_number = [];
-                    $items = explode(',', $rack['item_number']);
-                    foreach ($items as $item) {
-                        $temp = explode('-', $item)[0];
-                        if (!in_array($temp, $item_number)) {
-                            array_push($item_number, $temp);
-                        }
-                    }
-                    $rack['item_number'] = $item_number;
+                    $rack['item_number'] = $this->extractUniqueItemNumbers($rack['item_number']);
                 }
-                if ($j == 0) {
-                    $rackA[$i] = $rack;
-                } else if ($j == 1) {
-                    $rackB[$i] = $rack;
-                } else if ($j == 2) {
-                    $rackC[$i] = $rack;
-                } else {
-                    $rackG[$i] = $rack;
-                }
+
+                $this->assignRackToCategory($j, $rack, $rackA, $rackB, $rackC, $rackG, $i);
             }
         }
+
         return view('rack-info')->with([
             'menu' => 'rack',
             'aisle' => $aisle,
@@ -631,6 +676,64 @@ class HomeController extends Controller
             'rackG' => $rackG,
             'end' => $end,
         ]);
+    }
+
+    protected function calculateEnd($aisle)
+    {
+        switch ($aisle) {
+            case 'G':
+            case 'H':
+                return 425;
+            case 'I':
+            case 'J':
+                return 675;
+            case 'K':
+                return 725;
+            default:
+                return 575;
+        }
+    }
+
+    protected function getRackInfoByNumber($rackNumber)
+    {
+        return Stock::where('stocks.rack_number', $rackNumber)
+            ->select([
+                DB::raw('SUM(weight) as weight'),
+                DB::raw('COUNT(item_number) as qty'),
+                DB::raw('GROUP_CONCAT(item_number) as item_number')
+            ])
+            ->addSelect('capacities.capacity')
+            ->leftJoin('capacities', 'capacities.rack_number', '=', 'stocks.rack_number')
+            ->groupBy('stocks.rack_number')
+            ->first();
+    }
+
+    protected function extractUniqueItemNumbers($itemNumberString)
+    {
+        $itemNumbers = explode(',', $itemNumberString);
+        $uniqueItemNumbers = array_unique(array_map(function ($item) {
+            return explode('-', $item)[0];
+        }, $itemNumbers));
+
+        return array_values($uniqueItemNumbers);
+    }
+
+    protected function assignRackToCategory($index, $rack, &$rackA, &$rackB, &$rackC, &$rackG, $i)
+    {
+        switch ($index) {
+            case 0:
+                $rackA[$i] = $rack;
+                break;
+            case 1:
+                $rackB[$i] = $rack;
+                break;
+            case 2:
+                $rackC[$i] = $rack;
+                break;
+            case 3:
+                $rackG[$i] = $rack;
+                break;
+        }
     }
 
     public function settings()
