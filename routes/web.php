@@ -69,6 +69,7 @@ Route::group(['middleware' => ["auth"]], function () {
 
     Route::group(['middleware' => 'access:' . Page::PAGES["database"]], function () {
         Route::get('all-data', 'HomeController@getAllData')->name('all-data');
+        Route::get('stocks', 'HomeController@stockDataTable')->name('stockDataTable');
     });
 
     Route::group(['middleware' => 'access:' . Page::PAGES["rack_info"]], function () {

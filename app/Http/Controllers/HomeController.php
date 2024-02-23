@@ -20,6 +20,7 @@ use App\Models\GlassReport;
 use App\Models\WindowsAssembly;
 use App\Models\Contacts;
 use App\Models\TextAPI;
+use Yajra\Datatables\Datatables;
 
 class HomeController extends Controller
 {
@@ -558,11 +559,26 @@ class HomeController extends Controller
 
     public function getAllData()
     {
-        $stocks = Stock::get();
+        // $stocks = Stock::get();
         return view('all-data')->with([
             'menu' => 'database',
-            'stocks' => $stocks,
+            // 'stocks' => $stocks,
         ]);
+    }
+
+    public function stockDataTable ()
+    {
+        // $stocks = Stock::paginate(100);
+        // return view('all-data')->with([
+        //     'menu' => 'database',
+        //     'stocks' => $stocks,
+        // ]);
+        return Datatables::of(Stock::query())
+        ->editColumn("id", function ($stock) {
+            return $stock->id;
+        })
+        ->rawColumns(['id'])
+        ->make(true);
     }
 
     public function deleteShippedItems()

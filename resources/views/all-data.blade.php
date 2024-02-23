@@ -33,17 +33,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php $index = 1 ?>
-                @foreach($stocks as $data)
-                    <tr>
-                        <td>{{ $index++ }}</td>
-                        <td>{{ $data['rack_number'] }}</td>
-                        <td>{{ $data['weight'] }}</td>
-                        <td>{{ $data['item_number'] }}</td>
-                        <td>{{ $data['name'] }}</td>
-                        <td>{{ $data['note'] }}</td>
-                    </tr>
-                @endforeach
+               
                 </tbody>
             </table>
         </div>
@@ -53,8 +43,25 @@
 
 @section('script')
     <script>
-        $('#stock-data').dataTable({
-            "lengthMenu": [[100, 250, 500, -1], [100, 250, 500, "All"]]
+        // $('#stock-data').dataTable({
+        //     "lengthMenu": [[100, 250, 500, -1], [100, 250, 500, "All"]]
+        // });
+        $('#stock-data').DataTable({
+            "processing": true,
+            "serverSide": true,
+            "ajax": {
+                "url": "{{ route('stockDataTable') }}",
+                "type": "GET"
+            },
+            "columns": [
+                { "data": "id" },
+                { "data": "rack_number" },
+                { "data": "weight" },
+                { "data": "item_number" },
+                { "data": "name" },
+                { "data": "note" }
+            ],
+            "lengthMenu": [[10, 50, 100, -1], [10, 50, 100, "All"]]
         });
     </script>
 @endsection
