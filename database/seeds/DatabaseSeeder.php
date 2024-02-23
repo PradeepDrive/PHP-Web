@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 use App\User;
+use App\Models\Page;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -11,14 +13,18 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-       User::create([
+       $user = User::create([
            "email" => "admin@vpwglass.com",
            "username" => "admin",
            "first_name" => "first",
            "last_name" => "last",
            "password" => Hash::make("admin@1234"),
            'email_verified_at' => now(),
+            "landing_page" => 1,
        ]);
+       $pages = Page::pluck('id')->toArray();
+       $user->pagesAccess()->sync($pages);
+
         // for ($i=0; $i < 50; $i++) {
         //     $email = str_shuffle($email);
         //    User::create([
