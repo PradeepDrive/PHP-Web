@@ -170,6 +170,13 @@ Route::group(['middleware' => ["auth"]], function () {
         Route::get('wrapping-status-data', 'WrappingStatusController@wrappingStatusData')->name('wrapping_status.wrappingStatusData');
     });
 
+
+    Route::group([  'middleware' => 'access:' . Page::PAGES["temperature"]], function () {
+        Route::get('temperature-create', 'WrappingStatusController@temperatureCreate')->name('temperature.create');
+        Route::post('temperature-store', 'WrappingStatusController@temperatureStore')->name('temperature.store');
+    });
+
+    
 });
 
 Route::get('verify-remember-me', [LoginController::class, 'verifyRememberMe'])->name('login.verify-remember-me');

@@ -38,4 +38,20 @@ class WrappingStatusController extends Controller
 
         return $data;
     }
+
+
+    public function temperatureCreate(Request $request)
+    {
+        return view('wrapping_status.temperature_create')->with([
+            "menu" => "temperature"
+        ]);
+    }
+
+
+    public function temperatureStore(Request $request)
+    {
+        DB::table('Temperature')->insert($request->except('_token'));
+        $request->session()->flash("info_message","Temperature has been added successfully.");
+        return redirect()->back();
+    }
 }
