@@ -32,6 +32,7 @@ class Page extends Model
         "complete_window_inventory" => 22,
         "complete_window_inventory_search" => 23,
         "search" => 24,
+        "wrapping_status" => 25,
     ];
 
     protected $guarded = [

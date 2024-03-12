@@ -165,6 +165,11 @@ Route::group(['middleware' => ["auth"]], function () {
 
     });
 
+    Route::group([  'middleware' => 'access:' . Page::PAGES["wrapping_status"]], function () {
+        Route::get('wrapping-status', 'WrappingStatusController@index')->name('wrapping_status.index');
+        Route::get('wrapping-status-data', 'WrappingStatusController@wrappingStatusData')->name('wrapping_status.wrappingStatusData');
+    });
+
 });
 
 Route::get('verify-remember-me', [LoginController::class, 'verifyRememberMe'])->name('login.verify-remember-me');

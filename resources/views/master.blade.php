@@ -44,6 +44,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.28/sweetalert2.min.js" integrity="sha512-CyYoxe9EczMRzqO/LsqGsDbTl3wBj9lvLh6BYtXzVXZegJ8VkrKE90fVZOk1BNq3/9pyg+wn+TR3AmDuRjjiRQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert2/11.7.28/sweetalert2.min.css" integrity="sha512-IScV5kvJo+TIPbxENerxZcEpu9VrLUGh1qYWv6Z9aylhxWE4k4Fch3CHl0IYYmN+jrnWQBPlpoTVoWfSMakoKA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js" integrity="sha512-eYSzo+20ajZMRsjxB6L7eyqo5kuXuS2+wEbbOkpaur+sA2shQameiJiWEzCIDwJqaB0a4a6tCuEvCOBHUg3Skg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <style>
         #toastsContainerTopRight {
             position: fixed !important;
@@ -241,6 +244,12 @@
                     </li>
                 @endif
 
+                @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.wrapping_status'))->first())
+                    <li class="nav-item  @if ($menu == 'wrapping_status') active @endif">
+                        <a class="nav-link" href="{{ route('wrapping_status.index') }}">Wrapping status</a>
+                    </li>
+                @endif
+
                 <li class="nav-item">
                     <a class="nav-link" id="logout_menu" href="{{ route('logout') }}"
                         onclick="event.preventDefault();
@@ -274,7 +283,7 @@
         $(document).ready( function() {
             var timeout = 5 * 60 * 1000
             setTimeout(() => {
-                $('#logout_menu').trigger('click')
+                // $('#logout_menu').trigger('click')
             }, timeout);
         })
     </script>
