@@ -250,11 +250,11 @@
                     </li>
                 @endif
 
-                <!-- @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.temperature'))->first()) -->
-                    <li class="nav-item  ">
+                @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.temperature'))->first())
+                    <li class="nav-item  @if ($menu == 'temperature') active @endif">
                         <a class="nav-link" href="{{ route('temperature.create') }}">Temperature</a>
                     </li>
-                <!-- @endif -->
+                @endif
 
                 <li class="nav-item">
                     <a class="nav-link" id="logout_menu" href="{{ route('logout') }}"
