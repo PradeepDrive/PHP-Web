@@ -39,7 +39,6 @@ class UserController extends Controller
     {
         $user = Auth::user()->load(["pagesAccess"]);
         $pages = Page::all();
-        dd($pages);
         $departments = Department::all();
         return view('users.add')->with([
             'menu' => 'users',
