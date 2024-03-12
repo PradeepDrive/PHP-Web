@@ -21,7 +21,6 @@ class UserController extends Controller
      */
     public function index()
     {
-        dd('asd');
         $user = Auth::user()->load(["pagesAccess"]);
         $users = User::with(['pagesAccess','landing'])->get();
         return view('users.index')->with([
