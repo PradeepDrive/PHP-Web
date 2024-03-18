@@ -129,15 +129,24 @@
 
         if (responseData) {
             $.each(responseData, function(ordernumber, value) {
+                let rowColor = value['windows_assembly'] == 0 ? 'red' :
+                    (value['windows_assembly'] == value['frame_report'] ? 'green' :
+                    (value['windows_assembly'] < value['frame_report'] ? 'yellow' : ''));
+
+                let rowColorWorkOrder = value['work_order'] == 0 ? 'red' :
+                    (value['work_order'] == value['stock'] ? 'green' :
+                    (value['work_order'] < value['stock'] ? 'yellow' : ''));
+                
                 $('#status_table tbody').append(`
                 <tr>
                     <td>${ordernumber}</td>
-                    <td>${value['frame_report']}/${value['windows_assembly']}</td>
-                    <td>${value['status']}</td>
+                    <td style="background-color: ${rowColor}">${value['windows_assembly']}/${value['frame_report']}</td>
+                    <td style="background-color: ${rowColorWorkOrder}">${value['work_order']}/${value['stock']}</td>
                 </tr>
-                `)
+                `);
             });
         }
+
         $.unblockUI();
     }
     </script>
