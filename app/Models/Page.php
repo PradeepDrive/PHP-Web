@@ -34,6 +34,7 @@ class Page extends Model
         "search" => 24,
         "wrapping_status" => 25,
         "temperature" => 26,
+        "water_temperature" => 27,
     ];
 
     protected $guarded = [

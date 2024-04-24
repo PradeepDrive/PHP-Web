@@ -24,5 +24,6 @@ return [
         "24" => "search",
         "25" => "wrapping_status",
         "26" => "temperature",
-    ] 
+        "27" => "water_temperature",
+     ] 
 ];

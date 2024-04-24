@@ -176,6 +176,11 @@ Route::group(['middleware' => ["auth"]], function () {
         Route::post('temperature-store', 'WrappingStatusController@temperatureStore')->name('temperature.store');
     });
 
+    Route::group(['middleware' => 'access:' . Page::PAGES["water_temperature"]], function () {
+        Route::get('water-temperature-create', 'WrappingStatusController@waterTemperatureCreate')->name('water_temperature.create');
+        Route::post('water-temperature-store', 'WrappingStatusController@waterTemperatureStore')->name('water_temperature.store');
+    });
+
     
 });
 

@@ -256,6 +256,12 @@
                     </li>
                 @endif
 
+                @if (auth()->user()->pagesAccess()->where('pages.id', config('constant.PAGES.water_temperature'))->first())
+                    <li class="nav-item  @if ($menu == 'water_temperature') active @endif">
+                        <a class="nav-link" href="{{ route('water_temperature.create') }}">Water Temperature</a>
+                    </li>
+                @endif
+
                 <li class="nav-item">
                     <a class="nav-link" id="logout_menu" href="{{ route('logout') }}"
                         onclick="event.preventDefault();
