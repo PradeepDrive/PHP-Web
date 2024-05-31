@@ -16,7 +16,7 @@
     @endif
     <div class="row mt-5">
         <div class="col-12">
-            <h3>Employee registration</h3>
+            <h3>Employee Registration</h3>
         </div>
     </div>
 
@@ -61,9 +61,9 @@
                     </div>
                 </div>
                 <div class="row form-group mt-3">
-                    <label for="address_street_name" class="col-sm-4 font-weight-bold">Street Name:<span class="required">*</span></label>
+                    <label for="address_street_name" class="col-sm-4 font-weight-bold">Street Name:</label>
                      <div class="col-sm-8 ">
-                         <input type="text" id="address_street_name" name="address_street_name" placeholder="Enter Street Name" value="{{old('address_street_name')}}"  class="form-control" required="required">
+                         <input type="text" id="address_street_name" name="address_street_name" placeholder="Enter Street Name" value="{{old('address_street_name')}}"  class="form-control">
                     </div>
                 </div>
                 <div class="row form-group mt-3">
@@ -98,9 +98,9 @@
                     </div>
                 </div>
                 <div class="row form-group mt-3">
-                    <label for="phone_2" class="col-sm-4 font-weight-bold">Phone 2:<span class="required">*</span></label>
+                    <label for="phone_2" class="col-sm-4 font-weight-bold">Phone 2:</label>
                      <div class="col-sm-8">
-                         <input type="text" id="phone_2" name="phone_2" placeholder="Enter Second Phone" value="{{old('phone_2')}}" required="required" class="form-control">
+                         <input type="text" id="phone_2" name="phone_2" placeholder="Enter Second Phone" value="{{old('phone_2')}}" class="form-control">
                     </div>
                 </div>
 
@@ -183,9 +183,9 @@
                     </div>
                 </div>
                 <div class="row form-group mt-3">
-                    <label for="relation_to_you_1" class="col-sm-4 font-weight-bold">Relation to You:<span class="required">*</span></label>
+                    <label for="relation_to_you_1" class="col-sm-4 font-weight-bold">Relationship to You:<span class="required">*</span></label>
                      <div class="col-sm-8 ">
-                         <input type="text" id="emg_relation_to_you_1" name="relation_to_you_1" placeholder="Enter Relation to You" value="{{old('relation_to_you_1')}}" required="required" class="form-control">
+                         <input type="text" id="emg_relation_to_you_1" name="relation_to_you_1" placeholder="Enter Relationship to You" value="{{old('relation_to_you_1')}}" required="required" class="form-control">
                     </div>
                 </div>
                 <div class="row form-group mt-3">
@@ -195,15 +195,15 @@
                     </div>
                 </div>
                 <div class="row form-group mt-3">
-                    <label for="emg_phone_1_2" class="col-sm-4 font-weight-bold">Phone 1:<span class="required">*</span></label>
+                    <label for="emg_phone_1_2" class="col-sm-4 font-weight-bold">Phone 2:</label>
                      <div class="col-sm-8">
-                         <input type="text" id="emg_phone_1_2" name="emg_phone_1_2" placeholder="Enter First Phone" value="{{old('emg_phone_1_2')}}" required="required" class="form-control">
+                         <input type="text" id="emg_phone_1_2" name="emg_phone_1_2" placeholder="Enter First Phone" value="{{old('emg_phone_1_2')}}" class="form-control">
                     </div>
                 </div>
                 <div class="row form-group mt-3">
-                    <label for="emg_email_1" class="col-sm-4 font-weight-bold">Email Address:<span class="required">*</span></label>
+                    <label for="emg_email_1" class="col-sm-4 font-weight-bold">Email Address:</label>
                      <div class="col-sm-8 ">
-                         <input type="email" id="emg_email_1" name="emg_email_1" placeholder="Enter Email Address" value="{{old('emg_email_1')}}" required="required" class="form-control">
+                         <input type="email" id="emg_email_1" name="emg_email_1" placeholder="Enter Email Address" value="{{old('emg_email_1')}}" class="form-control">
 
                     </div>
                 </div>
@@ -215,39 +215,39 @@
                 </div>
 
                 <div class="row form-group mt-3">
-                    <label for="emg_first_name_2" class="col-sm-4 font-weight-bold">First Name:<span class="required">*</span></label>
+                    <label for="emg_first_name_2" class="col-sm-4 font-weight-bold">First Name:</label>
                      <div class="col-sm-8 ">
-                         <input type="text" id="emg_first_name_2" name="emg_first_name_2" placeholder="Enter First Name" value="{{old('emg_first_name_2')}}" required="required" class="form-control">
+                         <input type="text" id="emg_first_name_2" name="emg_first_name_2" placeholder="Enter First Name" value="{{old('emg_first_name_2')}}" class="form-control">
                     </div>
                 </div>
                 <div class="row form-group mt-3">
-                    <label for="emg_last_name_2" class="col-sm-4 font-weight-bold">Last Name:<span class="required">*</span></label>
+                    <label for="emg_last_name_2" class="col-sm-4 font-weight-bold">Last Name:</label>
                      <div class="col-sm-8 ">
-                         <input type="text" id="emg_last_name_2" name="emg_last_name_2" placeholder="Enter Last Name" value="{{old('emg_last_name_2')}}" required="required" class="form-control">
+                         <input type="text" id="emg_last_name_2" name="emg_last_name_2" placeholder="Enter Last Name" value="{{old('emg_last_name_2')}}" class="form-control">
                     </div>
                 </div>
                 <div class="row form-group mt-3">
-                    <label for="relation_to_you_2" class="col-sm-4 font-weight-bold">Relation to You:<span class="required">*</span></label>
+                    <label for="relation_to_you_2" class="col-sm-4 font-weight-bold">Relationship to You:</label>
                      <div class="col-sm-8 ">
-                         <input type="text" id="emg_relation_to_you_2" name="relation_to_you_2" placeholder="Enter Relation to You" value="{{old('relation_to_you_2')}}" required="required" class="form-control">
+                         <input type="text" id="emg_relation_to_you_2" name="relation_to_you_2" placeholder="Enter Relationship to You" value="{{old('relation_to_you_2')}}" class="form-control">
                     </div>
                 </div>
                 <div class="row form-group mt-3">
-                    <label for="emg_phone_2_1" class="col-sm-4 font-weight-bold">Phone 1:<span class="required">*</span></label>
+                    <label for="emg_phone_2_1" class="col-sm-4 font-weight-bold">Phone 1:</label>
                      <div class="col-sm-8">
-                         <input type="text" id="emg_phone_2_1" name="emg_phone_2_1" placeholder="Enter First Phone" value="{{old('emg_phone_2_1')}}" required="required" class="form-control">
+                         <input type="text" id="emg_phone_2_1" name="emg_phone_2_1" placeholder="Enter First Phone" value="{{old('emg_phone_2_1')}}" class="form-control">
                     </div>
                 </div>
                 <div class="row form-group mt-3">
-                    <label for="emg_phone_2_2" class="col-sm-4 font-weight-bold">Phone 1:<span class="required">*</span></label>
+                    <label for="emg_phone_2_2" class="col-sm-4 font-weight-bold">Phone 2:</label>
                      <div class="col-sm-8">
-                         <input type="text" id="emg_phone_2_2" name="emg_phone_2_2" placeholder="Enter First Phone" value="{{old('emg_phone_2_2')}}" required="required" class="form-control">
+                         <input type="text" id="emg_phone_2_2" name="emg_phone_2_2" placeholder="Enter First Phone" value="{{old('emg_phone_2_2')}}" class="form-control">
                     </div>
                 </div>
                 <div class="row form-group mt-3">
-                    <label for="emg_email_2" class="col-sm-4 font-weight-bold">Email Address:<span class="required">*</span></label>
+                    <label for="emg_email_2" class="col-sm-4 font-weight-bold">Email Address:</label>
                      <div class="col-sm-8 ">
-                         <input type="email" id="emg_email_2" name="emg_email_2" placeholder="Enter Email Address" value="{{old('emg_email_2')}}" required="required" class="form-control">
+                         <input type="email" id="emg_email_2" name="emg_email_2" placeholder="Enter Email Address" value="{{old('emg_email_2')}}" class="form-control">
 
                     </div>
                 </div>
